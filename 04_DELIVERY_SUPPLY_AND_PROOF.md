@@ -239,7 +239,7 @@ and an update writes the inactive slot and reboots into it.
 **Anyone can sign an update this device installs.** Section 5.2 established that
 `otacerts.zip` holds exactly one certificate, the AOSP `testkey`, whose private half
 is published. The recovery updater verifies against that and nothing else.
-
+**omissions have been made for Public Interest**
 **The delivery channels are present and awake.** Section 9.2 caught the ADUPS client
 mid-poll, in `CHECK_NEW_VERSION`, Doze-exempt so it is never suspended.
 
