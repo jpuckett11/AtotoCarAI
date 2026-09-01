@@ -406,6 +406,11 @@ told anything about.
 The permission holder is `com.atoto.speechtotext`, the same package as the wakeword
 listener, which declares `READ_SMS` alongside `RECORD_AUDIO`.
 
+**And it is silent-install channel 5.** §9.1 lists that channel under the component
+name `com.atoto.command.dispatcher.service`, which is a service inside this same
+package. The application that received this message also holds `INSTALL_PACKAGES`,
+`CAMERA`, `SYSTEM_ALERT_WINDOW` and `READ_PRIVILEGED_PHONE_STATE`. See §9.1.1.
+
 This is the finding that resists abstraction. A person who never bought the device,
 never consented to anything, and does not appear anywhere in the transaction had
 information about their medical care stored on a Chinese-built appliance with six

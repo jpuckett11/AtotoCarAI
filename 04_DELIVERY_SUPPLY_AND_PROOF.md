@@ -34,11 +34,53 @@ audit found six.
 
 `INSTALL_PACKAGES` is not `REQUEST_INSTALL_PACKAGES`. The former installs with no user
 dialog and is signature-level, meaning it cannot be granted to a third party
-application. Four of these hold it. They hold it because they are signed with the
-platform key from §5.1, which is public.
+application. **Three of these hold it**, channels 1, 3 and 5. They hold it because they
+are signed with the platform key from §5.1, which is public.
 
 Channel 5 is worth reading twice. An application called "drive chat" holds silent
 install, SMS read, microphone, and overlay. The name explains none of those.
+
+### 9.1.1 Verified 2026-09-01, with two corrections and one connection the paper missed
+
+Every permission in the table above was re-read from the shipped manifests and **every
+one is confirmed.** The table is accurate. Three things around it were not.
+
+**Correction 1, arithmetic.** The sentence above previously read "four of these hold
+it." Three do: `com.abupdate.fota_demo_iot`, `com.atoto.carsysteminfo`, and channel 5.
+Channels 4 and 6 hold `REQUEST_INSTALL_PACKAGES`, which prompts. Channel 2 is a shell
+script and holds no permissions at all. **Corrected in place above.**
+
+**Correction 2, and it matters more than it looks.** Channel 5 is listed as package
+`com.atoto.command.dispatcher.service`. That is not a package. It is a *component*
+inside `Atoto_DriveChat_s8`, whose actual package name is **`com.atoto.speechtotext`**.
+
+**Which means Chapter 8 and Chapter 9 have been describing the same application under
+two different names, and neither chapter says so.** §8.2 identifies
+`com.atoto.speechtotext` as the wakeword listener that holds `READ_SMS` alongside
+`RECORD_AUDIO`, and it is the package that ingested the medical message. §9.1 lists it
+as silent-install channel 5 without recognising it.
+
+Read as one package, its declared permission set is:
+
+```
+INSTALL_PACKAGES              silent install, no dialog
+RECORD_AUDIO                  the always-on wakeword microphone
+READ_SMS                      the Bluetooth MAP ingestion in 8.2
+CAMERA                        not mentioned anywhere in this paper until now
+SYSTEM_ALERT_WINDOW           draw over other applications
+READ_PRIVILEGED_PHONE_STATE   IMEI and subscriber identifiers
+```
+
+**One application on this device holds the microphone, the camera, message access,
+overlay, privileged phone identity, and the ability to install software without asking.**
+That is not six findings distributed across two chapters. It is one package, and the
+paper had all the pieces and never put them next to each other.
+
+**Under-reported elsewhere too.** `READ_PRIVILEGED_PHONE_STATE` is held by four of the
+five packages, and is in the table for none of them. Channel 4 additionally holds
+`SYSTEM_ALERT_WINDOW`; channel 3 additionally holds `REQUEST_INSTALL_PACKAGES`. Every
+one of those is an addition to the case, not a subtraction. **In this chapter the errors
+all run in the same direction: the shipped device is worse than the paper said.**
 
 ## 9.2 The channels are not dormant
 
