@@ -139,37 +139,58 @@ transport keys.
 **Capability 1 in the list above is withdrawn. Capability 3 is downgraded from
 "present" to "referenced, never invoked."**
 
-### 6.5.2 What the decompile found instead
+### 6.5.2 There is no lock, and that is the finding
 
-The same pass surfaced a facility the earlier analysis had missed, and it is worth more
-than the one it replaces.
+The hunt for the locking mechanism failed because there is no locking mechanism. That
+is not a gap in the analysis. It is the result.
+
+The device never enters a locked state. It does not call `startLockTask`. It does not
+consume the exit keys. Its key-shielding API is empty. **So there is no locked state to
+leave, no mode to exit, and no flag that a user, an application, or a support technician
+could clear.**
+
+What holds the driver in place is **configuration**, assembled from §6.4 and unchanged
+by this correction: `has_navi_bar=0` removes the on-screen navigation controls, the
+package blacklist removes the alternate routes out through file managers and search,
+and `autoConnect` re-establishes the session if it does happen to drop. None of those
+is a lock. Each is a setting, and together they produce the same result as a lock while
+being none of the things a lock is.
+
+**That is worse than kiosk mode, not better.** A kiosk is a documented state. It has an
+API, an owner, an entry point and an exit. It can be detected, disclosed, audited, and
+switched off. This has none of that. There is no state to detect, nothing to name in a
+bug report, and nothing for a vendor to disable in the next build. A vendor asked about
+`startLockTask` can truthfully answer that they do not use it.
+
+**It also explains why the decompile was always going to come up empty**, which is why
+the failed hunt is published rather than buried. Anyone reading §6.5 would have gone
+looking for the same call sites and found the same nothing. The absence is the evidence.
+
+### 6.5.3 What the decompile found instead
+
+The same pass surfaced a facility the earlier analysis had missed, and it points the
+opposite way to the one that was proposed.
 
 `IMainSdkKeyServer` exposes `requestMockKeyEvent(String, int, int)` over Binder, and
-`com.carsyso.mainsdk.utils.KeyEventUtil` implements key **injection** directly. It
+`com.carsyso.mainsdk.utils.KeyEventUtil` implements key **injection** directly: it
 constructs a `KeyEvent` and dispatches it by reflection through
 `InputManager.injectInputEvent`. Its own debug strings, in Chinese, describe simulating
 the back key.
 
-That is the inverse of the proposed mechanism. The evidence does not show the device
-swallowing the driver's key presses. It shows the device able to manufacture key presses
-of its own, and exposing that ability over Binder to anything that can bind the service.
-
-**What changes and what does not.** The owner's experience in §6.1 is unaffected; it was
-recorded as an observation and it remains one. `has_navi_bar=0`, the package blacklist
-and `autoConnect` are unchanged and still do what §6.4 says. What is withdrawn is the
-specific claim that the exit control is consumed rather than honoured.
+The evidence does not show the device swallowing the driver's key presses. It shows the
+device able to manufacture key presses of its own, and exposing that ability over Binder
+to anything that can bind the service. On a platform whose signing key is public
+(§5.1), "anything that can bind the service" is not a meaningful restriction.
 
 **Limits of this pass.** Two applications were examined, the two §6.5 named. Another
-package could implement the same interface with real bodies. A search of `system/app`
-and `system/priv-app` for the interface name found no other implementation, but that
-search reads compressed APK containers and is not conclusive. Runtime behavior was not
-observed. **The honest position is that the mechanism behind the observed behavior is
-now unidentified, and the previous candidate has been eliminated.**
+package could implement the same interface with real bodies; a search of `system/app`
+and `system/priv-app` found no other implementation, but that search reads compressed
+APK containers and is not conclusive. Runtime behavior was not observed.
 
 ## 6.6 Why it belongs in a security paper rather than a review
 
 Difficulty reaching the car's interface reads as poor design. In the context of the
-rest of this document it has three other properties.
+rest of this document it has four other properties.
 
 It is **persistence**. A device the owner cannot easily exit is a device the owner
 cannot easily inspect, disable or unplug in the moment they become suspicious.
@@ -179,6 +200,14 @@ at a screen they cannot leave.
 
 It is **safety**. The reversing camera and the defroster are not entertainment
 features.
+
+And it is **unaddressable**, which is the property §6.5.2 establishes and the one that
+matters most for remediation. There is no lock here to remove. A defect with a name and
+an API can be fixed, disclosed and verified fixed. A condition assembled from three
+settings, none of which is individually wrong, has nothing for a vendor to patch, nothing
+for a regulator to cite, and nothing for an owner to switch off. It is the same shape as
+the credential problem in §5.3.2: a state that harms the buyer, costs nobody else
+anything, and has no component whose removal resolves it.
 
 ---
 
