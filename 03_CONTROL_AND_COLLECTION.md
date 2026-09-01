@@ -105,6 +105,67 @@ The observation is not in doubt. The mechanism is identified. The final step fro
 "capable of this" to "does this" is one decompile away and should be taken before this
 chapter is cited externally.
 
+### 6.5.1 The decompile was taken, and it does not support the mechanism above
+
+**Corrected 2026-09-01.** The paragraph above stands unedited, because the correction is
+worth more than a quiet fix. The work it asked for has been done and the proposed
+mechanism is **not** what the code shows.
+
+`MainAiBox.apk` (sha256 `a22db806…1b25ce5d`) and `SdLauncher3.apk` (sha256
+`d3bc1310…8dfe0728`) were decompiled from the 2026-06-04 ROM dump. Each finding below
+is a negative stated with its control.
+
+**1. `MainAiBox.onKeyDown` does not exist.** There is no `onKeyDown`, `onKeyUp` or
+`dispatchKeyEvent` override anywhere in `MainAiBox`'s vendor code; the only occurrences
+are inside bundled support-library classes. *Control: the string is present and findable
+in that decompile, twice, in `AppCompatActivity`.* The method §6.5 named as the target
+is not there.
+
+**2. The launcher does not consume the exit keys.** `com.android.launcher3.Launcher`
+does override `onKeyDown`, and for `KEYCODE_HOME` and `KEYCODE_BACK` it performs a
+workspace UI action and then returns `super.onKeyDown(...)`. **It passes the event
+through.** Consuming would require returning `true`, and it does not.
+
+**3. Lock task is never engaged.** `startLockTask()` and `setLockTaskPackages()` appear
+in neither APK. The single `LOCK_TASK` hit in each is an unrelated constant,
+`ON_LOCK_TASK_MODE_CHANGED`, inside a bundled SystemUI helper.
+
+**4. The key-shielding API is declared and empty.** The OEM SDK exposes an AIDL
+interface `IMainSdkKeyServer` carrying `requestShieldKeys(byte[])` and
+`requestUnshieldKeys(byte[])`. In `KeyBinder`, the class implementing it, **both method
+bodies are empty.** The only key codes referenced anywhere in vendor code are media
+transport keys.
+
+**Capability 1 in the list above is withdrawn. Capability 3 is downgraded from
+"present" to "referenced, never invoked."**
+
+### 6.5.2 What the decompile found instead
+
+The same pass surfaced a facility the earlier analysis had missed, and it is worth more
+than the one it replaces.
+
+`IMainSdkKeyServer` exposes `requestMockKeyEvent(String, int, int)` over Binder, and
+`com.carsyso.mainsdk.utils.KeyEventUtil` implements key **injection** directly. It
+constructs a `KeyEvent` and dispatches it by reflection through
+`InputManager.injectInputEvent`. Its own debug strings, in Chinese, describe simulating
+the back key.
+
+That is the inverse of the proposed mechanism. The evidence does not show the device
+swallowing the driver's key presses. It shows the device able to manufacture key presses
+of its own, and exposing that ability over Binder to anything that can bind the service.
+
+**What changes and what does not.** The owner's experience in §6.1 is unaffected; it was
+recorded as an observation and it remains one. `has_navi_bar=0`, the package blacklist
+and `autoConnect` are unchanged and still do what §6.4 says. What is withdrawn is the
+specific claim that the exit control is consumed rather than honoured.
+
+**Limits of this pass.** Two applications were examined, the two §6.5 named. Another
+package could implement the same interface with real bodies. A search of `system/app`
+and `system/priv-app` for the interface name found no other implementation, but that
+search reads compressed APK containers and is not conclusive. Runtime behavior was not
+observed. **The honest position is that the mechanism behind the observed behavior is
+now unidentified, and the previous candidate has been eliminated.**
+
 ## 6.6 Why it belongs in a security paper rather than a review
 
 Difficulty reaching the car's interface reads as poor design. In the context of the
