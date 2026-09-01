@@ -211,7 +211,7 @@ anything, and has no component whose removal resolves it.
 
 ---
 
-# Chapter 7 - The two services that cannot be stopped
+# Chapter 7 - Persistence as a service
 
 `AtotoKeepAliveService` is a system application whose entire purpose is restarting
 other processes. It is not a general watchdog. It keeps alive exactly three things:
@@ -236,6 +236,63 @@ The same intent appears in `/system/etc/permissions/platform.xml`, where
 allowlist as `allow-in-power-save`. Android suspends background applications when the
 device idles. This one is explicitly exempted, so the silent-install channel is never
 paused.
+
+## 7.1 Corrected 2026-09-01: it is not three things, it is anything that asks
+
+`AtotoKeepAliveService.apk` (sha256 `86d3edac…6f924ea8`) was decompiled. The paragraphs
+above are left as written; the correction is below, because it makes the finding worse
+rather than softer.
+
+**It does not keep alive a list of packages. It keeps alive a list of intent actions,
+resolved at runtime.**
+
+```java
+private static final String[] actions = {
+    "com.atoto.keepalive",
+    "com.atoto.speechtotext.wakeup",
+    "com.atoto.trackhu.KEEP_ALIVE"
+};
+```
+
+`KeepAliveUtils.findServiceAndGenerateIntent` calls
+`getPackageManager().queryIntentServices(new Intent(action), 0)`, builds an explicit
+intent for **every service that matches**, and `KeepAliveService.checkProcessIfAlive`
+starts any of them not currently running, via `startForegroundService`. The loop runs
+**every 10 seconds**, beginning 30 seconds after start.
+
+**So the resurrection is not scoped to the microphone and the GPS tracker. It is
+available to any application that declares one of those three actions in its manifest.**
+Declare `com.atoto.keepalive` on a service and a system-signed, `persistent="true"`
+process will restart it within ten seconds of it being killed, indefinitely, with no
+user-visible indication. On a platform whose signing key is published (§5.1), the set of
+applications that can do this is unbounded.
+
+**The service itself is unprotected.** From the manifest:
+
+```xml
+<service  exported="true" persistent="true" name="…KeepAliveService"/>
+<provider exported="true" authorities="com.atoto.lockprovider" name="…LockProvider"/>
+```
+
+Both are exported. **Neither declares a permission.** Any application can start the
+service and any application can reach the provider.
+
+**And `com.atoto.lockprovider` is not a lock in the §6 sense.** It is a mutex: a
+ContentProvider at `content://com.atoto.lockprovider` holding one boolean, exposing
+`acquire_lock` and `release_lock` through `call()`. First caller wins, everyone after
+gets `false` until it is released. Listing it in the persistence set above without that
+distinction implied a connection to Chapter 6 that does not exist, and there is none.
+
+Because it is exported without a permission, any application on the device can acquire
+that mutex and never release it, or release one it never held. **Nothing in this
+application ever acquires it**: the authority string appears twice in the entire APK,
+both times inside `LockProvider` itself. Whatever it was built to serialize, this app
+does not use it, and it stands open to anything that does.
+
+**What survives unchanged.** The microphone listener and the GPS tracker are in the
+protected set, and the point that the OEM built dedicated resurrection machinery for
+those two stands. **What replaces the original claim** is that the machinery is generic,
+unauthenticated, and offered to any caller who knows the name.
 
 ---
 
