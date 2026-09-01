@@ -13,7 +13,8 @@ Version 1.0, published 2026-09-01
 Published while the investigation is still open, deliberately. Several threads are
 live and several questions are unresolved, and they are marked as such throughout
 rather than smoothed over. Appendix E lists what was observed but not confirmed and
-what was not attempted at all.
+what was not attempted at all. Procedures are omitted for federal security track. 
+Some findings are also omitted for the same.
 
 Expect this to change. Findings may be revised, sharpened, or withdrawn as more is
 learned, and any correction will be made in place with the original left visible.
