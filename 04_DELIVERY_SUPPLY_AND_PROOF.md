@@ -554,11 +554,57 @@ means a USB cable and brief physical access reach the same place.
 
 ### 10.5.4 What is established, and what decides the severity
 
+**The link is not theoretical, and the product demonstrates it.** The device displays
+live vehicle telemetry on the head unit: engine RPM, road speed, fuel consumption. That
+data has exactly one source. It is read from the vehicle's OBD-II port, through the
+bundled reader, over the BLE pairing described above. The feature cannot work any other
+way.
+
+So the question is not whether this device can reach the diagnostic bus. It is reaching
+it right now, in every unit that ships, continuously, whenever the vehicle is running.
+The owner is shown the proof on the screen and is sold it as a feature. **A reader
+looking for evidence that the transport is live does not need this paper. They need to
+look at the dashboard.**
+
+That settles the transport and it settles persistence. It does not settle direction,
+which is the remaining question and the reason §10.5 is written the way it is. Reading
+Mode 01 parameter identifiers is a read operation against a constrained interface.
+Sending an unstructured byte buffer to the same microcontroller is not. What the
+telemetry feature proves is that the pipe exists, is powered, is paired, and carries
+traffic in normal operation. What it does not prove is what the far end will accept
+coming back the other way.
+
+**On direction, the marketing makes a claim that has only two possible readings.** The
+product is advertised as able to improve fuel economy through selectable presets. A
+device cannot change a vehicle's fuel consumption by reading from it. So either:
+
+1. **It writes to the vehicle.** Presets that alter fuel economy imply commanding
+   something on the far side of the OBD-II port, which is a write to the bus and is the
+   exact capability §10.5 says is not established. Or
+2. **The claim is unsupported**, and the feature is driver coaching derived from data it
+   already reads, sold in language that implies vehicle control it does not have.
+
+**Both branches are findings and they belong to different regulators.** The first is a
+vehicle safety matter for NHTSA. The second is a deceptive advertising matter for the
+FTC and for the retailer carrying the listing. There is no third reading in which the
+claim is both true and harmless.
+
+**[U] The marketing language is the researcher's account and the listing has not been
+captured as an exhibit.** It should be, before this is relied on. A dated capture of
+the product page costs nothing and converts this from recollection to evidence.
+
+**[P] What is already in hand and points the same way:** `MainAiBox` ships
+window-control graphics. A user interface built to raise and lower a vehicle's windows
+is not a read-only design. That asset was catalogued before this question was asked and
+it is doing more work than it was given credit for.
+
 **Established on the device.** The bundled matched-pair hardware; the AIDL and its
-unconstrained parameter; the persistent BLE pairing and its watchdog; OBD interfaces
-in three OEM applications; `libcarsyso_serial_port.so`; a CAN box callback interface;
-window-control graphics in `MainAiBox`; a CAN MCU firmware update channel taking
-`.hex` images; and a factory CAN protocol mode in the build template from §10.2.1.
+unconstrained parameter; the persistent BLE pairing and its watchdog; **continuous
+live OBD-II reads, evidenced by the telemetry display being a working product
+feature**; OBD interfaces in three OEM applications; `libcarsyso_serial_port.so`; a CAN
+box callback interface; window-control graphics in `MainAiBox`; a CAN MCU firmware
+update channel taking `.hex` images; and a factory CAN protocol mode in the build
+template from §10.2.1.
 
 **Not established, and it is the whole question.** Whether the bundled reader forwards
 arbitrary frames to the vehicle bus, and whether a given vehicle's gateway carries them
