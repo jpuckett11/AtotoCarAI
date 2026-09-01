@@ -174,7 +174,7 @@ left at library defaults, and the evidence captured does not separate them.
 showing whether the phone stopped responding or the receiver stopped pinging. The
 capture in the submitted bundle is 24 bytes and holds zero packets.
 
-## E.2 Work not performed
+## E.2 Work not performed *omitted*
 
 **Bundled OBD-II reader firmware, section 10.5. Not recoverable by this
 investigation.** The reader shipped in the same retail package was never flash-dumped
