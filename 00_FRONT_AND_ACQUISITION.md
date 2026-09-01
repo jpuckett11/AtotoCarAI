@@ -34,6 +34,22 @@ A consumer aftermarket accessory sold on Amazon, which plugs into a car's factor
 head unit to add wireless Android Auto and CarPlay, was acquired at retail and its
 firmware extracted in full. The device runs Android 13 on a Qualcomm SDM662.
 
+**What the device is architecturally matters more than what it is sold as.** Wireless
+projection works by terminating the session from the phone and re-presenting it to the
+head unit. This accessory is not a cable and it is not a passive adapter. It
+authenticates to the phone as a car and to the car as a phone, and it sits in the path
+of everything that session carries: navigation, audio, notifications, contacts, call
+history, messages. The Bluetooth pairing it requires adds more, independently of the
+projection session, because the OEM applications ingest SMS over the Message Access
+Profile.
+
+**That position is not a vulnerability this paper discovered. It is the product.** A
+device sold to make a phone talk to a car is, by construction, a machine-in-the-middle
+between the two, holding credentials that let each side believe it is talking to the
+other. Everything that follows is about what that position becomes when the device
+occupying it has no working trust boundary, ships with a published signing key, and
+accepts code from six channels.
+
 The analysis found no functioning trust boundary at any layer examined.
 
 The platform is signed with the AOSP test key, whose private half is published in the
