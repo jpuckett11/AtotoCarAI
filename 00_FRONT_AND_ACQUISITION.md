@@ -52,10 +52,14 @@ accepts code from six channels.
 
 The analysis found no functioning trust boundary at any layer examined.
 
-The platform is signed with the AOSP test key, whose private half is published in the
-Android source tree, across 294 of 354 application packages including
-`PackageInstaller`, `Settings`, `SystemUI` and `KeyChain`. Over-the-air update
-packages are verified against the same published key. A production private key issued
+The platform is signed with keys whose private halves are published in the Android
+source tree. Of 354 application packages, **276 are signed with one of the five
+published AOSP keys**, matched by fingerprint against upstream, including
+`PackageInstaller`, `Settings`, `SystemUI` and `KeyChain`. A further 18 carry the same
+AOSP distinguished name with different key material, giving 294 that bear that
+identity; §5.1 sets out why a subject line is not a key and why the fingerprint is the
+number that counts. Over-the-air update packages are verified against another of the
+same published keys. A production private key issued
 under Google's Android Auto certificate authority sits unencrypted on a world-readable
 partition, and the matching certificate chains cleanly to Google's root. The root
 certificate the device trusts for that relationship is refetched over cleartext HTTP

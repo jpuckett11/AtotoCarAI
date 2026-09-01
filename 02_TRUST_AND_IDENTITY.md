@@ -376,6 +376,14 @@ Code: `ReportDataService.java:307-340`, `NetworkCoreManager.java:300-330`,
 `MD5(json + SUDING_SIGN_KEY)` where the sign key is a compile-time constant in
 `SudingHttpClient`, recoverable by decompiling the APK that everyone has.
 
+**There are two clients, not one.** `CarDataManager` ships `SudingHttpClient`, carrying
+`SUDING_BASE_URL = "http://120.79.59.57:8080/device-web"` with the paths above, and
+`YunlianHttpClient`, which hardcodes the same host and the same `queryClientMD5` and
+`downLoadFile` endpoints in full, plus an additional `/open/addModeInfo`. Each has its
+own compile-time sign key. The cleartext certificate-replacement surface is therefore
+reachable by two independent code paths inside one application, and hardening either
+one would not close the other.
+
 Three failures compose:
 
 1. **No transport security.** No server authentication, no confidentiality, no
