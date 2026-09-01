@@ -194,10 +194,17 @@ this device, for 5.7 days, and had 1,486 positions waiting to leave.
 records. One was a carrier notice. The other was a medical appointment reminder
 concerning a minor child, received 2026-05-17.
 
-The child is not the investigator's. The message reached the device because the
-investigator's phone was paired to it and the OEM applications ingest SMS over
-Bluetooth MAP, as documented in F-004 across six separate applications using
-split-permission routing.
+The child is not the investigator's. The message was on the investigator's phone
+because the two families share a Google account plan, so account-level notices reach
+the plan holder. It reached the device from there: the phone was paired over
+Bluetooth, and the OEM applications ingest SMS over Bluetooth MAP, as documented in
+F-004 across six separate applications using split-permission routing.
+
+That chain is worth stating plainly, because it is the shape of the whole problem. A
+consumer arrangement two households made for convenience, plus a Bluetooth pairing
+made to play music, is sufficient to move a third party's medical information onto a
+device neither household bought, neither household controls, and neither household was
+told anything about.
 
 The permission holder is `com.atoto.speechtotext`, the same package as the wakeword
 listener, which declares `READ_SMS` alongside `RECORD_AUDIO`.
@@ -206,6 +213,27 @@ This is the finding that resists abstraction. A person who never bought the devi
 never consented to anything, and does not appear anywhere in the transaction had
 information about their medical care stored on a Chinese-built appliance with four
 silent-install channels and a queued upload path.
+
+### Why this one is not abstract to the investigator
+
+That child's father saved the investigator's life in combat.
+
+That is the entire relationship and it is the reason this sits in the body of the
+report rather than as a row in an appendix. It is also the reason the finding cannot
+be argued down to a statistic, which is what happens to every other sentence in this
+chapter when it is read at scale.
+
+The device drew no distinction. It ingested a stranger's carrier notice and that
+child's medical appointment identically, held them in the same database on the same
+unprotected partition, and left both reachable by the same four install channels and
+the same queued upload path. That indifference is the actual product being described
+in this paper. It is not a flaw that happened to catch someone important. There is no
+category of person it was built to be careful with.
+
+A debt of that kind is usually settled by showing up. This is what showing up looked
+like: learning that a retail accessory had quietly filed that man's child's medical
+information onto a device with a cellular modem and no working trust boundary, and
+then spending a year proving it, out of a body that does not get the year back.
 
 ## 8.3 The updater was awake the whole time
 
