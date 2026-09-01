@@ -47,7 +47,7 @@ package and a one-page law enforcement summary.
 
 **Google Vulnerability Reward Program.** Filed 2026-06-14 as issue 515507754.
 Substantive engagement. Google acknowledged, requested a proof of concept, specified
-sanitisation, asked that details remain confidential during assessment, and described
+sanitization, asked that details remain confidential during assessment, and described
 their work as addressing "supply-chain risks and unauthorized GMS distribution
 patterns." They separately released the Apple, PACCAR and ByteDance findings for
 independent disclosure while retaining the embargo on Google-specific material. The
@@ -66,12 +66,12 @@ device dismissed it at first-line support.
 
 **[I]** That pattern is worth more than any single finding in this paper. The
 mechanisms that are supposed to work did work, where they were used. What failed was
-not the existence of a process. It was two organisations declining to engage with one
+not the existence of a process. It was two organizations declining to engage with one
 they already had.
 
 ## 12.3 Scope of this document
 
-Google's issue is closed, and its published programme terms ask for reasonable advance
+Google's issue is closed, and its published program terms ask for reasonable advance
 notice rather than an affirmative release. This paper is published on that basis.
 
 PACCAR and Apple were notified in writing on 2026-06-17. Neither has responded
@@ -91,27 +91,38 @@ Chapter 10.5 carries the summary.
 
 §5.3.2 traced where the cost of the fix lands. This section completes the accounting,
 because the same pattern runs one node further back and it is not visible from inside
-any of the organisations involved.
+any of the organizations involved.
 
 **What the work cost.** The device was bought at retail with the researcher's own
 money. Firmware was acquired over EDL across twelve sessions. The analysis ran from May
 to September 2026. A proof of concept was built because Google asked for one, and
-sanitised to a specification Google set. Findings were held under embargo from June
+sanitized to a specification Google set. Findings were held under embargo from June
 until September, unpublished, while the material sat on a private machine. Both devices
 were surrendered to Homeland Security Investigations, which is why the prediction in
 §5.3.2 cannot be tested by the person who made it.
 
-**What it returned.** The submission was rated Moderate and routed to a feature team.
-On the tracker, `ASR Severity` is populated and **`ASR Eligible` and `ASR Payment` are
-blank** — not declined, unset. It was assessed under a programme whose hardware scope
-covers Pixel, Nest, Home, Pixel Watch and Fitbit, which this device could never
-satisfy regardless of severity. **No payment was made by any party.**
+**What it returned.** The report was filed through Google's main vulnerability
+reporting channel, to the Google and Alphabet Vulnerability Reward Program, which is
+the correct destination under Google's own routing guidance for anything that does not
+obviously belong to a specific product program. It was then handled by the Android
+Security Team under the Android and Google Devices Security Reward Program, whose
+hardware scope is Pixel, Nest, Home, Pixel Watch and Fitbit. This device is none of
+those, so under that program's rules it could not qualify for a reward regardless of
+severity.
+
+It was rated Moderate and routed to a feature team. On the tracker, `ASR Severity` is
+populated and **`ASR Eligible` and `ASR Payment` are blank** — not declined, unset.
+**No payment was made by any party.**
+
+**[I]** Whether the report was ever evaluated under the program it was submitted to is
+not established. It was asked, twice, and both answers restated the engineering
+severity rating rather than addressing the question.
 
 **Stated fairly, because the narrow version is the true one.** Google engaged
-substantively, asked for the proof of concept, specified sanitisation, and released the
+substantively, asked for the proof of concept, specified sanitization, and released the
 Apple, PACCAR and ByteDance findings on 2026-06-23 so they could be disclosed
 independently. The remediation ticket is assigned and a fix is in flight. What did not
-function was the reward track, on a device that programme was never built to cover.
+function was the reward track, on a device that program was never built to cover.
 This is not a claim of mistreatment.
 
 **[I] The structural observation, which is the reason this section exists.** Follow the

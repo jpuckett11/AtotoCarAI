@@ -6,7 +6,7 @@ Acquisition produced 31 GB across twelve sessions. This chapter documents how th
 was turned into findings, including the two points where the obvious approach failed
 and had to be replaced.
 
-The organising principle was coverage. An earlier pass had examined roughly a quarter
+The organizing principle was coverage. An earlier pass had examined roughly a quarter
 of the partitions, chosen because they were the ones with recognisable filesystems. A
 finding that lives in the other three quarters is invisible to that method, and the
 question "what did we not look at" has a specific answer worth producing.
@@ -108,7 +108,7 @@ network-position attacker can serve modified ephemeris.
 
 **China Mobile appears in the modem firmware.** `http://www.10086.cn`, 10086 being
 China Mobile's service number. This is independent corroboration, from the raw modem
-image rather than from application strings, of the CMCC customisation discussed in
+image rather than from application strings, of the CMCC customization discussed in
 Chapter 9.
 
 Note for the record: this scan did not run in the original 2026-07-28 pass. The
@@ -187,7 +187,7 @@ Stated plainly, because a coverage argument is worthless without its complement.
 **No live-system dynamic analysis in this pass.** The 2026-05-21 live extraction over
 ADB is separate work, reported in Chapter 7, and used a different access path.
 
-**No TLS interception.** Endpoint behaviour in this paper is derived from static
+**No TLS interception.** Endpoint behavior in this paper is derived from static
 analysis of the applications that contact them, not from observed traffic. Planned as
 Phase 2.
 

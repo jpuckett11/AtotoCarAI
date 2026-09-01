@@ -247,7 +247,7 @@ Those three facts compose. The missing line in 9.5 is one `allow` rule in a file
 travels inside an image, verified by a key anyone has, over a channel that is already
 running. Nothing has to be defeated. The mechanism in 9.5 is not absent from this
 device; it is shipped, dormant, and waiting on a policy file that the device's own
-update path is authorised to rewrite.
+update path is authorized to rewrite.
 
 ### 9.6.1 The eSIM sits underneath all of it
 
@@ -279,7 +279,7 @@ enumerate.
 update-replaceable partitions; updates are verified against a published key; the
 update client is awake; the LPA is outside Verified Boot with those permissions; the
 remote SIM stack is platform-signed; `sd-link.sh` ships and loops. Inferred, and
-labelled as such: that an actor able to sign an update can add the one policy line
+labeled as such: that an actor able to sign an update can add the one policy line
 and thereby make the shipped loader live. Not claimed: that eSIM reprovisioning by
 itself yields code execution, or that EIoT Club or the OEM has done any of this.
 
@@ -327,7 +327,7 @@ other brand. That understated it by a wide margin, and the correction runs in th
 direction of scale.
 
 Six firmware samples across five OEMs have been independently confirmed to ship the
-same unauthenticated root-access chain. Three were analysed in enough depth to compare
+same unauthenticated root-access chain. Three were analyzed in enough depth to compare
 directly:
 
 | | Atoto / Suding | Joying / Quzhida | Dasaita / HCT |
@@ -377,8 +377,8 @@ registry in any one script is a floor rather than a census.
 `load_services.json` goes further and references five brand namespaces in a single
 boot registry: `com.carsyso.mainui`, `carnetos.usbservice`, `com.sd.ball`,
 `com.suding.speedplay` and `com.suding.datamanager`. `get_easy_activate_state.sh`
-probes for an EasyConn or Carbit licence, so the same base image ships as any of
-several projection-protocol brands depending only on which licence file is present.
+probes for an EasyConn or Carbit license, so the same base image ships as any of
+several projection-protocol brands depending only on which license file is present.
 
 ### 10.2.1 The vendor left the build template on the device
 
@@ -457,7 +457,7 @@ build process arrives on the customer's device unexamined.
 Brands confirmed or strongly indicated as sharing this firmware architecture: Suding,
 Atoto, Carlinkit, Carsy and Carsyso, Carnetos, Joying, Dasaita, Eonon. The `huawei`
 profile is present in the registry and is left uninterpreted here; whether it
-represents actual Huawei-branded product or unauthorised use of the name is not
+represents actual Huawei-branded product or unauthorized use of the name is not
 established.
 
 **Scale, with its basis stated.** These products have been continuously available on
@@ -504,7 +504,7 @@ from hardware.
 subject of the Google disclosure this paper is embargoed under. This section concerns
 vehicle safety, belongs to a different disclosure track, and is developed in full in a
 separate case document scoped to NHTSA, Auto-ISAC, CISA and vehicle OEMs. It is
-summarised here because a paper describing what this product line is would be
+summarized here because a paper describing what this product line is would be
 misleading without it, and because Chapter 5's broken signing model is what makes the
 rest of it reachable. Nothing in this section is offered as part of the Google
 submission.
@@ -512,7 +512,7 @@ submission.
 ### 10.5.1 The device ships with a CAN-attached peer in the box
 
 The retail package is not one device. The Amazon listing that supplied the unit
-analysed here bundles the AI Box with an OBD-II Bluetooth reader, manufactured by the
+analyzed here bundles the AI Box with an OBD-II Bluetooth reader, manufactured by the
 same OEM. Both ends of the link are Suding's.
 
 That matters more than it first appears. In the ordinary aftermarket case a vendor can
@@ -599,8 +599,8 @@ Chapters 5 and 9 are analysis. This chapter is a test, and it produced a result.
 Performed on hardware owned by the researcher, using credentials recovered from that
 hardware, on an isolated network. No production Google endpoint was contacted. No
 device belonging to anyone else was involved. Google's triage explicitly requested a
-proof of concept and specified the sanitisation to apply to the output. Working copies
-of the private key were shredded on completion, and only sanitised artifacts retained.
+proof of concept and specified the sanitization to apply to the output. Working copies
+of the private key were shredded on completion, and only sanitized artifacts retained.
 
 ## 11.2 Tier one: the credential is a valid TLS identity
 

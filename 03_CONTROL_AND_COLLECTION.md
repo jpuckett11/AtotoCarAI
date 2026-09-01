@@ -87,7 +87,7 @@ Six capabilities are present in the shipped firmware:
 5. `has_navi_bar=0`, removing the software navigation controls.
 6. A package blacklist disabling both file managers and system search.
 
-Taken together those are sufficient to produce exactly the behaviour observed: the
+Taken together those are sufficient to produce exactly the behavior observed: the
 exit control is consumed rather than honoured, the launcher is pinned, and any session
 that does drop is re-established.
 
@@ -244,13 +244,13 @@ rplay.license   536 bytes   base64   mtime 2026-02-03 01:44
 ```
 
 That mtime is identical to `persist.suding.reverse.activate.time`, the activation
-timestamp above. The licence was written at the moment the unit was activated, three
+timestamp above. The license was written at the moment the unit was activated, three
 months before purchase.
 
 `rplay` is the AirPlay receiver implementation. Chapter 9 documents
 `/system/lib/libAirPlay.so` exporting a full AirPlay 2 receiver stack including
 HomeKit pairing identity APIs. This file establishes that the stack is not dormant
-code shipped by accident. It is licensed, on this unit, and the licence was
+code shipped by accident. It is licensed, on this unit, and the license was
 provisioned at the factory.
 
 `/system/bin/sd_mdnsd`, a private mDNS daemon, is present to advertise it on the

@@ -24,7 +24,7 @@ Version 1.0, published 2026-09-01
 >
 > Vehicle-safety analysis is carried in a separate case document routed to NHTSA,
 > Auto-ISAC and CISA, which is where it was scoped when it was written. Chapter 10.5
-> summarises it here.
+> summarizes it here.
 
 ---
 
@@ -89,7 +89,7 @@ Three things are readable directly from those four lines.
 for the system image and `device=bengal` for the vendor image. `qssi` is Qualcomm
 Single System Image. `bengal` is the SDM662 platform codename. `TKQ1.230627.001` and
 `RKQ1.230607.001` are Qualcomm internal reference builds from June 2023. A device that
-had gone through Google's certification programme would not carry a `qti` brand and a
+had gone through Google's certification program would not carry a `qti` brand and a
 reference-platform device name into retail.
 
 **The security patch baseline is 27 months stale at build time.** The system was
@@ -110,8 +110,8 @@ is the account name on the build host that compiled the image.
 
 Extraction was performed over Qualcomm Emergency Download mode, reached by holding the
 recovery control while applying power, which enumerates the SoC as USB `05c6:9008`.
-EDL exposes the Sahara protocol, which accepts a signed programmer binary; the
-programmer then exposes Firehose, which reads and writes raw storage beneath the
+EDL exposes the Sahara protocol, which accepts a signed programr binary; the
+programr then exposes Firehose, which reads and writes raw storage beneath the
 operating system entirely.
 
 Nothing on the running system participates in this. No root, no ADB, no exploit. The
@@ -141,9 +141,9 @@ Two details in that block matter more than the dump that followed.
 device these fields carry the OEM's assigned identifiers, burned into fuses at
 manufacture. Both are null. The device shipped to retail without OEM identity fusing.
 
-**A generic factory programmer was accepted.** The loader used,
+**A generic factory programr was accepted.** The loader used,
 `0014d0e100000000_d40eee56f3194665_FHPRG.bin`, is selected by matching the device's
-`PK_HASH` against a public database of factory programmers. It authenticated and ran.
+`PK_HASH` against a public database of factory programrs. It authenticated and ran.
 On a device with secure boot fused to an OEM-specific key, it would not.
 
 Those two facts together mean the storage was readable, and writable, by anyone
@@ -152,7 +152,7 @@ is a consequence of a device that could be read. It could equally have been writ
 
 ### 2.3 Firehose exposed write primitives, not only read
 
-The programmer advertised its capabilities on connection:
+The programr advertised its capabilities on connection:
 
 ```
 program   read   nop   patch   configure   setbootablestoragedrive
@@ -219,10 +219,10 @@ across two logical units would have been absent from the analysis.
 
 Before a single file was examined:
 
-1. The device accepts a publicly available factory programmer.
+1. The device accepts a publicly available factory programr.
 2. It has no OEM identity fused.
 3. Its storage is readable and writable in full by anyone with physical possession.
-4. The programmer exposing that access was built in December 2022 and shipped in the
+4. The programr exposing that access was built in December 2022 and shipped in the
    product.
 
 A device with a working secure boot chain fails at step one.

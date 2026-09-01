@@ -60,7 +60,7 @@ on the researcher's own equipment. No third-party system was accessed. No produc
 vendor endpoint was contacted during the proof of concept.
 
 Vehicle-safety analysis is carried in a separate case document routed to NHTSA,
-Auto-ISAC and CISA. Chapter 10.5 summarises it here.
+Auto-ISAC and CISA. Chapter 10.5 summarizes it here.
 
 ## Reuse
 

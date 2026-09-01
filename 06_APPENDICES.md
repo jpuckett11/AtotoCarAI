@@ -45,7 +45,7 @@ open-source projects that independently reference the same values.
 |---|---|---|
 | `BEGIN PRIVATE KEY` | `qcache.img` | the operational Google Automotive Link key |
 | `persist.suding.dev.uuid` | `qcache.img` | device identifier, survives factory reset |
-| `http://www.10086.cn` | `modem_a.img`, `modem_b.img` | China Mobile, corroborates CMCC customisation |
+| `http://www.10086.cn` | `modem_a.img`, `modem_b.img` | China Mobile, corroborates CMCC customization |
 | `http://path2.xtracloud.net/xtmation` | `modem_*.img` | Qualcomm assisted-GPS over cleartext HTTP |
 | `http://path3.xtracloud.net/xtra3Mi_eph.bin` | `modem_*.img` | as above |
 
@@ -192,5 +192,5 @@ classified and indicator-scanned but not disassembled.
 **ABX parsing.** `abx2xml.py` decodes `packages.xml` cleanly at 245 packages but
 desynchronises on some `settings_*.xml`. Not load-bearing for any finding here.
 
-**TLS interception.** Endpoint behaviour throughout is from static analysis, not
+**TLS interception.** Endpoint behavior throughout is from static analysis, not
 observed traffic. Planned as a later phase.

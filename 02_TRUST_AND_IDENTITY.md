@@ -37,7 +37,7 @@ Chinese IoT module with a cellular modem.
 
 **Independent corroboration.** The open-source Android Auto receiver project LIVI
 (`github.com/f-io/LIVI`, MIT licensed, clean-room) hardcodes
-`{ idVendor: 0x18d1, idProduct: 0x4ee1 }` as a recognised device identity for this
+`{ idVendor: 0x18d1, idProduct: 0x4ee1 }` as a recognized device identity for this
 hardware family. The disguise is not an Atoto choice. It is a platform-level pattern
 across the Carlinkit-family OEM output.
 
@@ -124,7 +124,7 @@ Chinese SDK look domestic.
 | Vietnamese brand permission | `vn.icar.entertaiment.REMOTE`, declared by `SdLauncher3` |
 
 A US consumer buying this Amazon SKU receives a Vietnam-regional firmware load with
-China Mobile modem customisation.
+China Mobile modem customization.
 
 ---
 
