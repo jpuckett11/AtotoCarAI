@@ -10,7 +10,7 @@ Version 1.0, published 2026-09-01
 
 ## This is a work in progress
 
-Published while the investigation is still open, deliberately. Several threads are
+Published while the work is still open, deliberately. Several threads are
 live and several questions are unresolved, and they are marked as such throughout
 rather than smoothed over. Appendix E lists what was observed but not confirmed and
 what was not attempted at all. Procedures are omitted for federal security track. 

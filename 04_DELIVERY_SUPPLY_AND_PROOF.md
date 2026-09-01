@@ -565,12 +565,12 @@ arbitrary frames to the vehicle bus, and whether a given vehicle's gateway carri
 to safety-relevant ECUs.
 
 The first was answerable by dumping the reader's firmware and sniffing the BLE link.
-Neither was done before the device left this investigation's custody: the reader was
+Neither was done before the device left the researcher's custody: the reader was
 handed to Homeland Security Investigations alongside the AI Box, in the same custody
 chain, and the pre-handoff flash dump did not happen. That work is therefore not
 available to be completed here, and the question stays open for whoever holds the
 hardware. It is recorded as a gap rather than presented as a limitation of the
-analysis, because it was a step this investigation intended to take and did not.
+analysis, because it was a step this research intended to take and did not.
 
 The second varies by manufacturer and model year: flat buses on older vehicles carry
 such frames, central gateways on newer ones usually filter them, and the middle of that

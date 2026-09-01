@@ -194,7 +194,7 @@ this device, for 5.7 days, and had 1,486 positions waiting to leave.
 records. One was a carrier notice. The other was a medical appointment reminder
 concerning a minor child, received 2026-05-17.
 
-The child is not the investigator's. The message was on the investigator's phone
+The child is not the researcher's. The message was on the researcher's phone
 because the two families share a Google account plan, so account-level notices reach
 the plan holder. It reached the device from there: the phone was paired over
 Bluetooth, and the OEM applications ingest SMS over Bluetooth MAP, as documented in
@@ -214,9 +214,9 @@ never consented to anything, and does not appear anywhere in the transaction had
 information about their medical care stored on a Chinese-built appliance with four
 silent-install channels and a queued upload path.
 
-### Why this one is not abstract to the investigator
+### Why this one is not abstract to the researcher
 
-That child's father saved the investigator's life in combat.
+That child's father saved the researcher's life in combat.
 
 That is the entire relationship and it is the reason this sits in the body of the
 report rather than as a row in an appendix. It is also the reason the finding cannot

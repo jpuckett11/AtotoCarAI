@@ -177,7 +177,7 @@ capture in the submitted bundle is 24 bytes and holds zero packets.
 ## E.2 Work not performed *omitted*
 
 **Bundled OBD-II reader firmware, section 10.5. Not recoverable by this
-investigation.** The reader shipped in the same retail package was never flash-dumped
+research.** The reader shipped in the same retail package was never flash-dumped
 and its BLE command framing was never sniffed. Those two steps decide whether the
 chain in 10.5 terminates at the vehicle bus or at a constrained diagnostic API. The
 device was handed to Homeland Security Investigations with the AI Box in the same
