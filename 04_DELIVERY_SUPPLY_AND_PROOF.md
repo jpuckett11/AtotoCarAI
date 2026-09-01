@@ -9,6 +9,13 @@
 Chapter 5 established that the device cannot tell a legitimate update from a forged
 one. This chapter counts the doors.
 
+**This is no longer a hypothetical surface.** In August 2026, while this analysis was
+held under embargo, malware was reported spreading through the built-in updaters of
+Android automotive head unit firmware, described as the first documented infection
+chain specific to car head units. Different hardware, same door. The channels
+catalogued below should be read as a count of what is available to an attacker who is
+already known to be using this category of path. See §10.4.1.
+
 ## 9.1 Six channels, not one
 
 The initial reporting described a single silent-install path. A systematic permission
@@ -485,7 +492,7 @@ identity, not a certified consumer device. The unit nevertheless ships Google Mo
 Services with authentic Google signatures, and asserts `release-keys` in build.prop
 while carrying the public test key.
 
-## 10.4 Nobody had looked
+## 10.4 Nobody had looked at this class
 
 The most developed public tooling for this OEM is a community firmware downloader with
 twelve months of releases. A code search across it returns zero hits for
@@ -497,6 +504,39 @@ archivists who collect images without reading them, protocol reverse-engineers w
 documented the host-to-device protocol including the Automotive Link certificate chain
 without access to any device credential, and this work, which recovered the credential
 from hardware.
+
+### 10.4.1 Prior art, and what is different here
+
+The adjacent literature is real and this paper does not stand alone. Stating it
+plainly, because a claim of novelty that ignores neighbouring work invites exactly one
+response.
+
+**NCC Group and Fox-IT, 2019, "The Sorry State of Aftermarket Head Unit Security."**
+Root on an aftermarket head unit, then using that head unit to compromise the
+Bluetooth-paired phone. That is Chapter 8's chain approached from the other end, seven
+years earlier, on a different device class.
+
+**Black Hat USA 2024, Cisco Talos.** A vehicle head unit exploited to dump process
+memory and recover GPS coordinates. Android Automotive OS in a manufacturer's vehicle
+rather than an aftermarket accessory, and the privacy framing overlaps §8.1 directly.
+
+**August 2026, in the wild.** Malware reported spreading through the built-in updaters
+of Android automotive head unit firmware, described as the first documented infection
+chain specific to car head units. **That is Chapter 9's subject arriving as an active
+campaign.** The six silent-install channels catalogued here are not a theoretical
+delivery surface. Something is already using that class of path.
+
+**What is not in the prior work.** None of it concerns a wireless projection adapter.
+None of it involves a device holding a vendor credential issued by a platform
+certificate authority. No published work recovers that credential from retail hardware,
+verifies the platform signing chain against upstream AOSP by fingerprint, maps the same
+firmware across a rebrand family, or examines a matched-pair bus-attached peer shipped
+in the same retail box.
+
+**So the claim is narrower than "nobody had looked," and it survives being narrowed.**
+People have looked at head units. Nobody had opened this class of accessory, and the
+class outnumbers the head units, costs less, and is bought by people who were told they
+were buying a cable.
 
 ## 10.5 The same firmware reaches the vehicle bus
 
