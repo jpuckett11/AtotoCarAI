@@ -212,8 +212,20 @@ to remove.
 **Both requirements cannot be satisfied on the same bench.** Doing it properly needs a
 screened environment with controlled RF pass-through, or an unshielded rig accepting
 that a modem-equipped subject is live on air throughout the test. Neither was available
-here. That is the first reason the terminal step of §10.5 was never validated. The
-second is that both devices entered HSI custody before it could be arranged.
+here.
+
+**The head unit was simulated too, and that is the second bench artifact.** The
+receiver side of the rig was an open-source Android Auto head unit implementation
+rather than a factory unit in a vehicle, and the projection session did not sustain
+against it. That is a property of the substitute, not of the product. A wireless
+projection adapter that dropped session in a real car would be returned by every
+customer who bought one, and this one has sold across multiple brands for roughly five
+years. Sustained session is not something this paper needs to demonstrate; it is the
+advertised function, and the product's continued commercial existence is the evidence.
+
+**Both failures are the rig.** Neither is why the terminal step of §10.5 went
+unvalidated in a vehicle. That reason is that both devices entered HSI custody before a
+vehicle test could be arranged.
 
 Recorded because the next person to attempt this will meet the same wall on their first
 afternoon, and because a limitation with a stated cause is worth more than a silence.

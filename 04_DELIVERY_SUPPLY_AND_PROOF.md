@@ -621,13 +621,20 @@ channels. Shielding also suppresses the BLE pairing this chain runs on, so it di
 hold inside the enclosure. Exercising the chain requires the RF environment the
 enclosure exists to remove, and both requirements cannot be met on one bench. See §3.7.
 
-**In a vehicle the same link is always up, deliberately.** §10.5.2 established that the
+**The receiver side was simulated too.** The rig used an open-source Android Auto head
+unit implementation in place of a factory unit, and the projection session did not
+sustain against it. That is a property of the substitute. A wireless projection adapter
+that dropped session in a real car would be returned by everyone who bought one, and
+this product has sold across multiple brands for roughly five years.
+
+**In a vehicle both links are up, deliberately.** §10.5.2 established that the BLE
 pairing is held open by `com.atoto.btlock`, a persistent foreground service, kept alive
 by the same `AtotoKeepAliveService` that exists to restart the microphone and the
 location tracker. It does not depend on the user having the device's interface open,
 and on an in-dash unit rather than a dongle it is powered whenever the vehicle is. **The
 one environment where this pairing is unreliable is a shielded room.** In the deployed
-case the vendor built a watchdog specifically to guarantee it.
+case the vendor built a watchdog specifically to guarantee it, and sells the projection
+session as the entire reason to buy the thing.
 
 **Then custody ended.** The reader went to Homeland Security Investigations alongside
 the AI Box, in the same chain, and the pre-handoff flash dump did not happen. That work
