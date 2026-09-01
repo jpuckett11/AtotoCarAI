@@ -310,6 +310,48 @@ built one, and built it over cleartext HTTP.
 
 The operational credential is the one used in the proof of concept in Chapter 11.
 
+### 5.3.2 The cheapest fix for a leaked credential strands the person who bought the device
+
+A leaked credential with a fixed expiry date has an obvious and nearly free
+remediation. Do nothing. Let it expire on schedule, and decline to issue the vendor a
+replacement. No certificate revocation, no change to the CA, no disruption to any
+other licensee, no engineering work. Every other holder of a Google Automotive Link
+credential rotates normally and stays online. The leaked key becomes worthless at
+16:47 UTC on 2026-08-05 without anyone touching anything.
+
+**[I] This is inference about remediation strategy, not a statement of what Google
+did.** It is recorded because it is the cheapest available path, because it is
+consistent with a Moderate severity rating on a finding of this shape, and because it
+predicts something specific and checkable.
+
+What it predicts is this. On 2026-08-05 the units running this firmware stop being
+able to complete the wireless receiver handshake. Not because they broke. Because a
+certificate the owner was never told about expired, and no replacement was issued to
+the company that sold it to them.
+
+**Nobody tells the owner.** There is no notification path in the firmware for this. The
+device does not say a credential expired. It will present as a fault, and the
+reasonable consumer response to a fault in a sub-hundred-dollar accessory is to assume
+it is broken and buy another one. The retail listing continues to advertise wireless
+Android Auto and CarPlay.
+
+**This is checkable now rather than in principle.** The expiry date is on the
+certificate, it has passed, and anyone holding one of these units can test whether the
+wireless receiver function still works. We could not run that test ourselves: the
+device and its bundled reader were handed to Homeland Security Investigations before
+the expiry date.
+
+**What is not established.** That Google chose non-renewal, that Suding has not
+obtained a credential by another route, and how many units are affected. Those are
+questions for the parties who can answer them.
+
+**[I] The point worth carrying.** The disclosure protected the credentialing system,
+and it protected every legitimate licensee, and it protected Google. It did not protect
+the person who paid for the box. The remediation that costs the vendor and the platform
+nothing transfers the entire cost to the buyer, silently, on a date they were never
+given. That is not a security failure. It is what a security fix looks like when nobody
+in the chain has an obligation to the person at the end of it.
+
 ## 5.4 The trust anchor is remotely rewritable over cleartext HTTP
 
 `ReportDataService.checkAndDownloadAutoCert()` in `CarDataManager.apk` runs **every 60
