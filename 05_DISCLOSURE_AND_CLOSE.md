@@ -87,6 +87,47 @@ Vehicle-safety analysis is carried in a separate case document routed to NHTSA,
 Auto-ISAC and CISA, which is where it was scoped when it was written in May 2026.
 Chapter 10.5 carries the summary.
 
+## 12.4 Who paid for this
+
+§5.3.2 traced where the cost of the fix lands. This section completes the accounting,
+because the same pattern runs one node further back and it is not visible from inside
+any of the organisations involved.
+
+**What the work cost.** The device was bought at retail with the researcher's own
+money. Firmware was acquired over EDL across twelve sessions. The analysis ran from May
+to September 2026. A proof of concept was built because Google asked for one, and
+sanitised to a specification Google set. Findings were held under embargo from June
+until September, unpublished, while the material sat on a private machine. Both devices
+were surrendered to Homeland Security Investigations, which is why the prediction in
+§5.3.2 cannot be tested by the person who made it.
+
+**What it returned.** The submission was rated Moderate and routed to a feature team.
+On the tracker, `ASR Severity` is populated and **`ASR Eligible` and `ASR Payment` are
+blank** — not declined, unset. It was assessed under a programme whose hardware scope
+covers Pixel, Nest, Home, Pixel Watch and Fitbit, which this device could never
+satisfy regardless of severity. **No payment was made by any party.**
+
+**Stated fairly, because the narrow version is the true one.** Google engaged
+substantively, asked for the proof of concept, specified sanitisation, and released the
+Apple, PACCAR and ByteDance findings on 2026-06-23 so they could be disclosed
+independently. The remediation ticket is assigned and a fix is in flight. What did not
+function was the reward track, on a device that programme was never built to cover.
+This is not a claim of mistreatment.
+
+**[I] The structural observation, which is the reason this section exists.** Follow the
+cost through every node. Google's remediation is free: let a certificate expire.
+The vendor's exposure ends when it is not reissued a credential. The retailer continues
+selling the listing. The buyer absorbs a device that quietly stops working. The
+researcher absorbs the purchase price, the months, and the risk of holding embargoed
+material. **Every party with a mechanism to recover its costs recovered them. The two
+parties with no mechanism, the buyer and the researcher, absorbed the entire bill.**
+
+That is not an argument for larger bounties. It is an observation that a disclosure
+system depending on unpaid individuals to find defects in products they bought
+themselves has no reason to expect a supply of them, and that the incentive to say
+nothing and simply keep the private key is left as an exercise for the next person who
+finds one.
+
 ---
 
 # Chapter 13 - Every check that could have caught this
