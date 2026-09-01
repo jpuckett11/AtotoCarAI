@@ -53,21 +53,60 @@ patterns." They separately released the Apple, PACCAR and ByteDance findings for
 independent disclosure while retaining the embargo on Google-specific material. The
 issue is now closed.
 
+**Apple Product Security.** Report sent to `product-security@apple.com` on 2026-06-17
+at 07:25 Central. The reply was an autoresponder directing the report to Apple's web
+vulnerability portal. **That portal requires an Apple ID.**
+
+The researcher does not own an Apple device. A legacy Apple ID exists but its password
+could not be recalled, for reasons connected to the condition described in §12.4. Apple
+Support declined to assist with account creation or recovery by telephone, by chat, and
+in person at a retail store reached by a three-hour round trip. The exchange at the
+store, recorded contemporaneously, with location, date and individual deliberately
+omitted:
+
+> *After explaining that a vulnerability report needed to be filed, that the legacy
+> password could not be recalled, and that no Apple device was owned:*
+>
+> **Manager:** "I don't really care about that, it's a two and a half hour wait right
+> now, we are busy."
+> **Researcher:** "Really? I think this matters more than buying a phone."
+> **Manager:** "Would you like to buy one?"
+> **Researcher:** "Ok, thank you Sir, have a good day."
+
+A sworn affidavit from the person who accompanied the researcher, and contemporaneous
+recordings, are held and are not published. The store, the date and the employee are
+withheld deliberately. What is described here is a process failure and it is not that
+manager's to answer for.
+
+**Seventy-six days after the report, no human at Apple Product Security has
+acknowledged it.**
+
+**[I] The structural point, and the reason this is in the paper rather than in a
+complaint.** The device carries an Apple-licensed CarPlay implementation. Apple's
+published intake route for a vulnerability in it terminates at a portal gated behind
+ownership of an Apple product, and the email channel autoreplies the reporter back to
+that portal. **That is not a vendor declining to engage. It is an intake path that a
+category of reporter cannot reach**, and the category is precisely the people who
+examine Apple-licensed hardware without buying into the ecosystem, which is who finds
+this class of defect. The accessibility dimension compounds it: credential recovery was
+refused on every channel offered, including the one that cost six hours of driving.
+
 **Federal channels.** Notified through their established intake routes. Remediation on
 the federal side was addressed with urgency. The specific routes and the substance of
 the response are not reproduced here: those are the agencies' to disclose, not the
 researcher's.
 
-The contrast is the point, and it is a three-way one. The federal channels moved with
-urgency. The company with a published vulnerability process engaged in detail and
-closed the matter. The vehicle manufacturer's product security team has not responded
-in seventy-six days and disconnected a telephone call, and the retailer selling the
-device dismissed it at first-line support.
+The contrast is the point, and it is a four-way one. The federal channels moved with
+urgency. The company with a published vulnerability process engaged in detail and closed
+the matter. Apple's process could not be entered at all. The vehicle manufacturer's
+product security team has not responded in seventy-six days and disconnected a telephone
+call, and the retailer selling the device dismissed it at first-line support.
 
 **[I]** That pattern is worth more than any single finding in this paper. The
-mechanisms that are supposed to work did work, where they were used. What failed was
-not the existence of a process. It was two organizations declining to engage with one
-they already had.
+mechanisms that are supposed to work did work, where they could be reached. What failed
+was not the existence of a process. Two organizations declined to engage with one they
+already had, and a third built one that a reporter without the right consumer hardware
+cannot enter.
 
 ## 12.3 Scope of this document
 
