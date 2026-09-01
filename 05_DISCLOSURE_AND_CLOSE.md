@@ -53,8 +53,21 @@ patterns." They separately released the Apple, PACCAR and ByteDance findings for
 independent disclosure while retaining the embargo on Google-specific material. The
 issue is now closed.
 
-The contrast is the point. The channel with a published vulnerability process engaged
-in detail. The retailer selling the device dismissed it at first-line support.
+**Federal channels.** Notified through their established intake routes. Remediation on
+the federal side was addressed with urgency. The specific routes and the substance of
+the response are not reproduced here: those are the agencies' to disclose, not the
+researcher's.
+
+The contrast is the point, and it is a three-way one. The federal channels moved with
+urgency. The company with a published vulnerability process engaged in detail and
+closed the matter. The vehicle manufacturer's product security team has not responded
+in seventy-six days and disconnected a telephone call, and the retailer selling the
+device dismissed it at first-line support.
+
+**[I]** That pattern is worth more than any single finding in this paper. The
+mechanisms that are supposed to work did work, where they were used. What failed was
+not the existence of a process. It was two organisations declining to engage with one
+they already had.
 
 ## 12.3 Scope of this document
 
