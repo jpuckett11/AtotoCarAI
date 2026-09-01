@@ -1,0 +1,103 @@
+% ---------------------------------------------------------------------------
+% Typesetting for the Atoto AI Box white paper.
+%
+% Two constraints drove most of what is here, and both come from the content
+% rather than from taste:
+%
+%   1. The paper is full of SHA-256 fingerprints (95 characters), full package
+%      names and URLs. Any code block that cannot break mid-token overflows the
+%      text block and prints into the margin. Hence fvextra with breakanywhere.
+%   2. The vendor's name appears in Chinese (苏丁). pdflatex dies on it, so the
+%      build is xelatex with Noto Sans CJK SC as the main font.
+%
+% pandoc injects header-includes after its own preamble, so redefinitions here
+% land on top of pandoc's defaults rather than under them.
+% ---------------------------------------------------------------------------
+
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{framed}
+\usepackage{needspace}
+\usepackage{fvextra}
+\usepackage{booktabs}
+
+\definecolor{ink}{HTML}{0B0B0B}
+\definecolor{ink2}{HTML}{52514E}
+\definecolor{accent}{HTML}{2A78D6}
+\definecolor{crit}{HTML}{D03B3B}
+\definecolor{hairline}{HTML}{C3C2B7}
+
+% --- headings --------------------------------------------------------------
+% \needspace stops a heading from being orphaned at the foot of a page, which
+% happens a lot in a document with this many short subsections.
+\titleformat{\section}
+  {\needspace{4\baselineskip}\normalfont\Large\bfseries\color{ink}}{}{0em}{}
+\titlespacing*{\section}{0pt}{20pt plus 4pt minus 2pt}{8pt}
+\titleformat{\subsection}
+  {\needspace{3\baselineskip}\normalfont\large\bfseries\color{ink}}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{14pt plus 3pt minus 2pt}{5pt}
+\titleformat{\subsubsection}
+  {\needspace{3\baselineskip}\normalfont\normalsize\bfseries\color{ink2}}{}{0em}{}
+
+% --- running heads ---------------------------------------------------------
+% The embargo restates itself on every single page. If a page of this document
+% is ever printed, photographed or forwarded on its own, it has to carry the
+% restriction with it.
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{hairline}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{hairline}\leaders\hrule height \footrulewidth\hfill}}
+\fancyhead[L]{\footnotesize\color{ink2}Atoto AI Box firmware analysis}
+\fancyhead[R]{\footnotesize\color{ink2}Obsidian Watch Group}
+\fancyfoot[L]{\footnotesize\color{crit}\textbf{EMBARGOED. NOT FOR DISTRIBUTION.}}
+\fancyfoot[R]{\footnotesize\color{ink2}\thepage}
+
+% --- code blocks -----------------------------------------------------------
+% breakanywhere is the load-bearing option: a 95-character hex fingerprint has
+% no break opportunity a normal line breaker would accept.
+% \footnotesize rather than \small is measured, not aesthetic: a 95-character
+% fingerprint in DejaVu Sans Mono fits this text block at 8pt and does not at
+% 9pt, and a fingerprint that wraps mid-token is harder to check by eye.
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+  fontsize=\footnotesize, frame=leftline, framerule=1.6pt,
+  rulecolor=\color{hairline}, xleftmargin=10pt, framesep=9pt,
+  breaklines=true, breakanywhere=true, breaksymbolleft={}
+}
+\fvset{breaklines=true, breakanywhere=true, fontsize=\footnotesize}
+\definecolor{shadecolor}{HTML}{F5F5F2}
+
+% --- the one Chinese string in the paper -----------------------------------
+% The vendor's name appears once, in section 3.6. Setting Noto Sans CJK SC as
+% the document's main font renders it, but CJK fonts give U+2019 a near
+% full-width advance, so every apostrophe in 9,800 words of English prints
+% with a visible gap. A Latin main font plus a one-word font switch is the
+% trade that keeps both correct.
+\newfontfamily\cjkfont{Noto Sans CJK SC}
+\newcommand{\cjk}[1]{{\cjkfont #1}}
+
+% --- block quotes ----------------------------------------------------------
+% Used for the embargo notice and the per-chapter reminder of it, so it gets a
+% red bar rather than the usual indent.
+\renewenvironment{quote}%
+  {\def\FrameCommand{\textcolor{crit}{\vrule width 2.5pt}\hspace{11pt}}%
+   \MakeFramed{\advance\hsize-\width\FrameRestore}\small\color{ink2}}%
+  {\endMakeFramed}
+
+% --- figures ---------------------------------------------------------------
+% H, not htbp: every figure is argued about in the paragraph beside it, so a
+% float that drifts two pages away breaks the sentence that refers to it.
+\floatplacement{figure}{H}
+\setkeys{Gin}{width=\linewidth}
+\captionsetup{font={small,color=ink2}, labelformat=empty,
+              justification=raggedright, singlelinecheck=false,
+              skip=7pt, parskip=0pt}
+
+% --- tables ----------------------------------------------------------------
+\renewcommand{\arraystretch}{1.18}
+
+\setcounter{secnumdepth}{0}   % the paper numbers its own sections in the text

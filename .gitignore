@@ -1,0 +1,12 @@
+# Not published. Contains a screenshot of a personal call log: family and friends'
+# names in Favourites, a named medical provider, and voicemail counts. None of that
+# belongs in a public repository and none of it is needed to support the paper.
+evidence/
+
+# Internal working record of who was contacted and when, with ATTESTED/CAPTURED
+# markers and notes to self. The public-facing version of this is the timeline in
+# chapter 12.
+DISCLOSURE_CONTACT_LOG.md
+
+*.tmp
+*~

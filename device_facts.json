@@ -1,0 +1,37 @@
+{
+ "sessions": [
+  "dump-20260519T193422Z",
+  "dump-20260519T193927Z",
+  "dump-20260519T194033Z",
+  "dump-20260519T194348Z",
+  "dump-20260519T194549Z",
+  "dump-20260519T195323Z",
+  "lun567-20260519T203051Z",
+  "multilun-20260519T200336Z",
+  "multilun-20260519T200643Z",
+  "multilun-20260519T200944Z",
+  "multilun-20260519T201046Z",
+  "multilun-20260519T202052Z"
+ ],
+ "HWID": "0x0014d0e100000000",
+ "PK_HASH": "0xd40eee56f3194665574109a39267724ae7944134cd53cb767e293d3c40497955bc8a4519ff992b031fadc6355015ac87",
+ "Serial": "0xd47e5dbc",
+ "CPU detected": "\"SDM662\"",
+ "firehose_functions": [
+  "program",
+  "read",
+  "nop",
+  "patch",
+  "configure",
+  "setbootablestoragedrive",
+  "erase",
+  "power",
+  "firmwarewrite",
+  "getstorageinfo",
+  "benchmark",
+  "emmc",
+  "ufs",
+  "fixgpt",
+  "getsha256digest"
+ ]
+}

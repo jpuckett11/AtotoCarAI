@@ -1,0 +1,21 @@
+{
+  "signing": {
+    "total": 354,
+    "public": 294,
+    "platform": 171,
+    "distinct_public_certs": 14
+  },
+  "partitions": {
+    "rows": 115,
+    "plotted": 114
+  },
+  "gps": {
+    "rows": 1486,
+    "active_hours": 28,
+    "span_days": 5.7,
+    "peak_hour": 120
+  },
+  "patch": {
+    "months": 35
+  }
+}
