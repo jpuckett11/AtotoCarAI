@@ -74,9 +74,17 @@ omitted:
 > **Researcher:** "Ok, thank you Sir, have a good day."
 
 A sworn affidavit from the person who accompanied the researcher, and contemporaneous
-recordings, are held and are not published. The store, the date and the employee are
-withheld deliberately. What is described here is a process failure and it is not that
-manager's to answer for.
+recordings, are held and are not published. **The store, the date and the employee are
+withheld deliberately, and the exchange is reproduced only because it shows what the
+process does at the point where it meets a person.**
+
+That manager is not the failure here. He was working a two-and-a-half-hour queue, asked
+for something no retail script covers, on a subject with no escalation path available to
+him. There was nowhere for him to send it, because Apple has not built anywhere for it
+to go. The same absence that returned an autoresponder to a vulnerability report left a
+store employee with nothing to offer but the thing he does have, which is a phone to
+sell. **He is the second person that process failed that day, and he did not get to
+write a paper about it.**
 
 **Seventy-six days after the report, no human at Apple Product Security has
 acknowledged it.**
@@ -89,7 +97,7 @@ that portal. **That is not a vendor declining to engage. It is an intake path th
 category of reporter cannot reach**, and the category is precisely the people who
 examine Apple-licensed hardware without buying into the ecosystem, which is who finds
 this class of defect. The accessibility dimension compounds it: credential recovery was
-refused on every channel offered, including the one that cost six hours of driving.
+refused on every channel offered, including the one that cost a three-hour round trip.
 
 **Federal channels.** Notified through their established intake routes. Remediation on
 the federal side was addressed with urgency. The specific routes and the substance of
