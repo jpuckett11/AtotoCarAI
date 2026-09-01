@@ -335,6 +335,56 @@ in `BuildConfig.java` and the build flavour marked `track_hu_cb6Prod`.
 Static analysis established that the code existed. This established that it ran, on
 this device, for 5.7 days, and had 1,486 positions waiting to leave.
 
+### 8.1.1 Re-verified 2026-09-01, and the endpoint count was understated
+
+Unlike Chapters 6 and 7, every figure above survives re-checking. The database
+(sha256 `72199164…f906ecdd`) was re-queried directly and each number reproduces
+exactly: **1,486 rows; 2026-05-14 03:06:21 to 2026-05-19 19:16:21, 5.67 days; 599
+distinct at four decimal places; 1,484 distinct at full precision; 562 samples above
+zero speed; maximum 73.4; bounding box 35.4614787 to 35.97055234 N and -87.05767129 to
+-86.77956963 W; eight decimal places of stored latitude.**
+
+`TrackingController.send(Position)` was also confirmed: it calls
+`ApiConfig.getUpdateLocation()`, which resolves to
+`BASE_URL + "/atoto-gps-core/gps/v1/uploadPosition"`. The build flavour string in the
+compiled metadata is `app_track_hu_cb6ProdRelease`.
+
+**What the paper got wrong is by omission.** `ApiConfig` does not carry one endpoint.
+It carries **seven**, all on the same base:
+
+```
+/atoto-gps-core/gps/v1/uploadPosition                  location upload
+/atoto-gps-core/gps/v1/carAction_updateSystemInfo      system data upload
+/atoto-gps-core/gps/v1/carAction_info/                 configuration fetch
+/atoto-gps-core/gps/v1/contactCustomerService          log upload
+/atoto-gps-core/gps/v1/getRegisterEmail/               registered email address
+/atoto-gps-core/gps/v1/getRegisterInfo/                registration record
+```
+
+Three of those change the character of the finding.
+
+**`carAction_updateSystemInfo` is a second upload path.** `TrackingController` carries
+`onSystemDataUpdate`, which posts a `SystemModel` to it. Position is not the only thing
+this application sends.
+
+**`getRegisterEmail` and `getRegisterInfo` are identity endpoints.** A GPS tracker that
+also retrieves the registered email address associated with a unit is not only
+recording where the vehicle went. It has a route to attach that record to a person.
+
+**`carAction_info` is the configuration document Chapter 9 §9.1 describes**, the one
+whose response carries `needUpdate` and `apkUrl` and drives `startUpload`. The
+location tracker and the silent-install channel are the same API family on the same
+host, reached by the same application.
+
+**One thing this pass could not confirm.** The `BASE_URL` literal itself.
+`ApiConfig.BASE_URL` reads from `BuildConfig.BASE_URL`, and the hostname
+`gpstrack.myatoto.com` stated above comes from F-001's earlier analysis rather than
+from anything re-read here. The APK is absent from the 2026-06-04 ROM capture, whose
+`Atoto_track_hu_ahd` directory contains only a `lib` subdirectory, and the string did
+not surface in the preserved dex extract. **The path is verified; the host is carried
+forward from the earlier pass and should be re-confirmed before that hostname is
+quoted anywhere externally.**
+
 ## 8.2 A message about a child
 
 `/data/user_de/0/com.android.providers.telephony/databases/mmssms.db` held two SMS
@@ -358,7 +408,7 @@ listener, which declares `READ_SMS` alongside `RECORD_AUDIO`.
 
 This is the finding that resists abstraction. A person who never bought the device,
 never consented to anything, and does not appear anywhere in the transaction had
-information about their medical care stored on a Chinese-built appliance with four
+information about their medical care stored on a Chinese-built appliance with six
 silent-install channels and a queued upload path.
 
 ### Why this one is not abstract to the researcher
@@ -372,7 +422,7 @@ chapter when it is read at scale.
 
 The device drew no distinction. It ingested a stranger's carrier notice and that
 child's medical appointment identically, held them in the same database on the same
-unprotected partition, and left both reachable by the same four install channels and
+unprotected partition, and left both reachable by the same six install channels and
 the same queued upload path. That indifference is the actual product being described
 in this paper. It is not a flaw that happened to catch someone important. There is no
 category of person it was built to be careful with.
