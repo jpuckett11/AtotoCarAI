@@ -101,6 +101,18 @@ until September, unpublished, while the material sat on a private machine. Both 
 were surrendered to Homeland Security Investigations, which is why the prediction in
 §5.3.2 cannot be tested by the person who made it.
 
+**What it cost that does not appear on any invoice.** The researcher works with a
+progressive neurological condition following a spinal injury. Bench work has a
+physical price, and unlike money and unlike time, the price is not recoverable. Hours
+at a workstation and hours over hardware are not neutral inputs that can be replaced
+later by working harder. They are spent out of a finite and declining capacity, and
+what is spent on a firmware image is not available for anything else, including for
+the people that capacity is supposed to be for.
+
+That is recorded here because it is part of the cost accounting and because it is
+invisible everywhere else. A submission portal has no field for it. A severity rubric
+does not weigh it. A reward panel, had one ruled, would not have known.
+
 **What it returned.** The report was filed through Google's main vulnerability
 reporting channel, to the Google and Alphabet Vulnerability Reward Program, which is
 the correct destination under Google's own routing guidance for anything that does not
@@ -138,6 +150,24 @@ system depending on unpaid individuals to find defects in products they bought
 themselves has no reason to expect a supply of them, and that the incentive to say
 nothing and simply keep the private key is left as an exercise for the next person who
 finds one.
+
+**The part that is not about money.** Every mechanism described in this paper is
+indifferent by construction. The signing model does not know whose key it is. The
+update channel does not know who it reaches. The severity rubric does not know what
+the finding cost to produce, the reward table has no row for a person, and the ticket
+has no field for what a year of this takes out of someone. None of that is malice.
+Nobody built any of it to grind a specific person down.
+
+But indifference at scale is not distinguishable from intent by the person absorbing
+it, and the outcome is the same either way. A system that has no mechanism to see what
+it takes from the people it depends on will take it until they are used up, and will
+record nothing when they stop. The individual is the only component in this entire
+chain with no redundancy, no reissue path, and no expiry date that resets anything.
+
+**This is the researcher's last report under this banner.** Not because the findings
+ran out. Because the arithmetic in this section is not survivable twice, and a family
+gets a say in that. The work above is offered complete, and it is offered as evidence
+for the next person deciding whether to do this at all.
 
 ---
 
