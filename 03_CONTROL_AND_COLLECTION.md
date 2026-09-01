@@ -22,16 +22,10 @@ controls a driver cannot reach include defrost and the reversing camera.
 
 Three OEM applications participate.
 
-**`MainAiBox`** handles the head unit's own hardware key codes directly, including:
-
-```
-KEYCODE_SRC        the SOURCE button, the control that changes input on a head unit
-KEYCODE_SETTING    the settings button
-HOME
-```
-
-with `onKeyDown`, `onKeyUp`, `onKeyDownPanel` and `onKeyUpPanel` handlers, plus
-`moveTaskToFront` and a reference to `LOCK_TASK`.
+**`MainAiBox`** carries strings for the head unit's own hardware key codes, including
+`KEYCODE_SRC`, the SOURCE button that changes input on a head unit, and
+`KEYCODE_SETTING`. It also carries `moveTaskToFront` and a reference to `LOCK_TASK`.
+Those are references. §6.5 establishes what the code actually does with them.
 
 **`SdLauncher3`** carries an `InterceptKeyEventListener`, `IMMERSIVE` mode, and its
 own `LOCK_TASK` reference.
@@ -75,117 +69,65 @@ they describe one intent: the user sees what the device chooses to show them, ca
 navigate away with software controls, cannot leave with hardware controls, and cannot
 inspect what is on the device.
 
-## 6.5 The mechanism, and the limit of the evidence
+## 6.5 There is no lock, and that is the finding
 
-Six capabilities are present in the shipped firmware:
+The obvious explanation for §6.1 is that the device pins itself: that it consumes the
+exit keys and engages Android's kiosk mode. `MainAiBox.apk` (sha256 `a22db806…1b25ce5d`)
+and `SdLauncher3.apk` (sha256 `d3bc1310…8dfe0728`) were decompiled to test that, and it
+is not what the code does. Each result below is a negative stated with its control.
 
-1. Handlers for the exact keys a driver would use to leave the projection session.
-2. A key interception listener in the launcher.
-3. `LOCK_TASK`, Android's kiosk-mode facility, which pins an application so the user
-   cannot leave it.
-4. `autoConnect`, which re-establishes the mirror session.
-5. `has_navi_bar=0`, removing the software navigation controls.
-6. A package blacklist disabling both file managers and system search.
+**There is no key handler in `MainAiBox`.** No `onKeyDown`, `onKeyUp` or
+`dispatchKeyEvent` override exists anywhere in its vendor code; the only occurrences are
+inside bundled support-library classes. *Control: the string is present and findable in
+that same decompile, twice, in `AppCompatActivity`.*
 
-Taken together those are sufficient to produce exactly the behavior observed: the
-exit control is consumed rather than honoured, the launcher is pinned, and any session
-that does drop is re-established.
+**The launcher does not consume the exit keys.** `com.android.launcher3.Launcher` does
+override `onKeyDown`, and for `KEYCODE_HOME` and `KEYCODE_BACK` it performs a workspace
+UI action and then returns `super.onKeyDown(...)`. It passes the event through.
+Consuming would require returning `true`.
 
-**What is proven:** the handlers, the listener, the `LOCK_TASK` references and
-`autoConnect` are all present in the shipped binaries, in the applications that own
-the display.
-
-**What is not yet proven:** that the key handlers return consumed rather than passing
-through, and that lock task is engaged at runtime rather than merely referenced. Both
-questions are answered by a jadx decompile of `MainAiBox.onKeyDown` and
-`SdLauncher3`'s interceptor, tracing return values and any `startLockTask()` call
-site. That work is not in this pass and the claim is scoped accordingly.
-
-The observation is not in doubt. The mechanism is identified. The final step from
-"capable of this" to "does this" is one decompile away and should be taken before this
-chapter is cited externally.
-
-### 6.5.1 The decompile was taken, and it does not support the mechanism above
-
-**Corrected 2026-09-01.** The paragraph above stands unedited, because the correction is
-worth more than a quiet fix. The work it asked for has been done and the proposed
-mechanism is **not** what the code shows.
-
-`MainAiBox.apk` (sha256 `a22db806…1b25ce5d`) and `SdLauncher3.apk` (sha256
-`d3bc1310…8dfe0728`) were decompiled from the 2026-06-04 ROM dump. Each finding below
-is a negative stated with its control.
-
-**1. `MainAiBox.onKeyDown` does not exist.** There is no `onKeyDown`, `onKeyUp` or
-`dispatchKeyEvent` override anywhere in `MainAiBox`'s vendor code; the only occurrences
-are inside bundled support-library classes. *Control: the string is present and findable
-in that decompile, twice, in `AppCompatActivity`.* The method §6.5 named as the target
-is not there.
-
-**2. The launcher does not consume the exit keys.** `com.android.launcher3.Launcher`
-does override `onKeyDown`, and for `KEYCODE_HOME` and `KEYCODE_BACK` it performs a
-workspace UI action and then returns `super.onKeyDown(...)`. **It passes the event
-through.** Consuming would require returning `true`, and it does not.
-
-**3. Lock task is never engaged.** `startLockTask()` and `setLockTaskPackages()` appear
-in neither APK. The single `LOCK_TASK` hit in each is an unrelated constant,
+**Lock task is never engaged.** `startLockTask()` and `setLockTaskPackages()` appear in
+neither APK. The single `LOCK_TASK` hit in each is an unrelated constant,
 `ON_LOCK_TASK_MODE_CHANGED`, inside a bundled SystemUI helper.
 
-**4. The key-shielding API is declared and empty.** The OEM SDK exposes an AIDL
-interface `IMainSdkKeyServer` carrying `requestShieldKeys(byte[])` and
-`requestUnshieldKeys(byte[])`. In `KeyBinder`, the class implementing it, **both method
-bodies are empty.** The only key codes referenced anywhere in vendor code are media
-transport keys.
+**The key-shielding API is declared and empty.** The OEM SDK exposes an AIDL interface
+`IMainSdkKeyServer` carrying `requestShieldKeys(byte[])` and `requestUnshieldKeys(byte[])`.
+In `KeyBinder`, the class implementing it, both method bodies are empty. The only key
+codes referenced anywhere in vendor code are media transport keys.
 
-**Capability 1 in the list above is withdrawn. Capability 3 is downgraded from
-"present" to "referenced, never invoked."**
+**So the device never enters a locked state, and that is the point.** There is no locked
+state to leave, no mode to exit, and no flag a user, an application or a support
+technician could clear.
 
-### 6.5.2 There is no lock, and that is the finding
+What holds the driver is **configuration**. `has_navi_bar=0` removes the on-screen
+controls, the package blacklist removes the routes out through file managers and search,
+and `autoConnect` re-establishes the session if it drops. None of those is a lock. Each
+is a setting, and together they produce what a lock produces while being none of the
+things a lock is.
 
-The hunt for the locking mechanism failed because there is no locking mechanism. That
-is not a gap in the analysis. It is the result.
+**That is worse than kiosk mode, not better.** A kiosk is a documented state with an
+API, an owner, an entry point and an exit. It can be detected, disclosed, audited and
+switched off. This has none of that. There is nothing to detect, nothing to name in a
+bug report, and nothing for a vendor to disable in the next build. Asked about
+`startLockTask`, the vendor can truthfully answer that they do not use it.
 
-The device never enters a locked state. It does not call `startLockTask`. It does not
-consume the exit keys. Its key-shielding API is empty. **So there is no locked state to
-leave, no mode to exit, and no flag that a user, an application, or a support technician
-could clear.**
+### 6.5.1 What the same pass found instead
 
-What holds the driver in place is **configuration**, assembled from §6.4 and unchanged
-by this correction: `has_navi_bar=0` removes the on-screen navigation controls, the
-package blacklist removes the alternate routes out through file managers and search,
-and `autoConnect` re-establishes the session if it does happen to drop. None of those
-is a lock. Each is a setting, and together they produce the same result as a lock while
-being none of the things a lock is.
-
-**That is worse than kiosk mode, not better.** A kiosk is a documented state. It has an
-API, an owner, an entry point and an exit. It can be detected, disclosed, audited, and
-switched off. This has none of that. There is no state to detect, nothing to name in a
-bug report, and nothing for a vendor to disable in the next build. A vendor asked about
-`startLockTask` can truthfully answer that they do not use it.
-
-**It also explains why the decompile was always going to come up empty**, which is why
-the failed hunt is published rather than buried. Anyone reading §6.5 would have gone
-looking for the same call sites and found the same nothing. The absence is the evidence.
-
-### 6.5.3 What the decompile found instead
-
-The same pass surfaced a facility the earlier analysis had missed, and it points the
-opposite way to the one that was proposed.
-
-`IMainSdkKeyServer` exposes `requestMockKeyEvent(String, int, int)` over Binder, and
-`com.carsyso.mainsdk.utils.KeyEventUtil` implements key **injection** directly: it
+`IMainSdkKeyServer` also exposes `requestMockKeyEvent(String, int, int)` over Binder,
+and `com.carsyso.mainsdk.utils.KeyEventUtil` implements key **injection** directly: it
 constructs a `KeyEvent` and dispatches it by reflection through
 `InputManager.injectInputEvent`. Its own debug strings, in Chinese, describe simulating
 the back key.
 
 The evidence does not show the device swallowing the driver's key presses. It shows the
 device able to manufacture key presses of its own, and exposing that ability over Binder
-to anything that can bind the service. On a platform whose signing key is public
-(§5.1), "anything that can bind the service" is not a meaningful restriction.
+to anything that can bind the service. On a platform whose signing key is public (§5.1),
+that is not a restriction.
 
-**Limits of this pass.** Two applications were examined, the two §6.5 named. Another
-package could implement the same interface with real bodies; a search of `system/app`
-and `system/priv-app` found no other implementation, but that search reads compressed
-APK containers and is not conclusive. Runtime behavior was not observed.
+**Limits.** Two applications were examined. Another package could implement the same
+interface with real bodies; a search of `system/app` and `system/priv-app` found no
+other implementation, but that search reads compressed containers and is not conclusive.
+Runtime behavior was not observed.
 
 ## 6.6 Why it belongs in a security paper rather than a review
 
@@ -201,7 +143,7 @@ at a screen they cannot leave.
 It is **safety**. The reversing camera and the defroster are not entertainment
 features.
 
-And it is **unaddressable**, which is the property §6.5.2 establishes and the one that
+And it is **unaddressable**, which is the property §6.5 establishes and the one that
 matters most for remediation. There is no lock here to remove. A defect with a name and
 an API can be fixed, disclosed and verified fixed. A condition assembled from three
 settings, none of which is individually wrong, has nothing for a vendor to patch, nothing
@@ -213,38 +155,10 @@ anything, and has no component whose removal resolves it.
 
 # Chapter 7 - Persistence as a service
 
-`AtotoKeepAliveService` is a system application whose entire purpose is restarting
-other processes. It is not a general watchdog. It keeps alive exactly three things:
-
-```
-com.atoto.lockprovider
-com.atoto.speechtotext.wakeup     the always-on wakeword listener
-com.atoto.trackhu.                the GPS tracker
-```
-
-via `startForegroundService`.
-
-Of everything on this device, the OEM built dedicated resurrection machinery for the
-microphone and the location tracker.
-
-That single fact reframes both of the findings it protects. A GPS uploader that stops
-when killed is a feature working badly. A GPS uploader with a system-signed companion
-whose job is to restart it is a design decision.
-
-The same intent appears in `/system/etc/permissions/platform.xml`, where
-`com.abupdate.fota_demo_iot`, the ADUPS update client, is placed on the Doze
-allowlist as `allow-in-power-save`. Android suspends background applications when the
-device idles. This one is explicitly exempted, so the silent-install channel is never
-paused.
-
-## 7.1 Corrected 2026-09-01: it is not three things, it is anything that asks
-
-`AtotoKeepAliveService.apk` (sha256 `86d3edac…6f924ea8`) was decompiled. The paragraphs
-above are left as written; the correction is below, because it makes the finding worse
-rather than softer.
-
-**It does not keep alive a list of packages. It keeps alive a list of intent actions,
-resolved at runtime.**
+`AtotoKeepAliveService` (sha256 `86d3edac…6f924ea8`) is a system application whose
+entire purpose is restarting other processes. It is not a general watchdog, and it is
+not scoped to a fixed list of packages. **It is keyed on intent actions, resolved at
+runtime.**
 
 ```java
 private static final String[] actions = {
@@ -256,43 +170,46 @@ private static final String[] actions = {
 
 `KeepAliveUtils.findServiceAndGenerateIntent` calls
 `getPackageManager().queryIntentServices(new Intent(action), 0)`, builds an explicit
-intent for **every service that matches**, and `KeepAliveService.checkProcessIfAlive`
-starts any of them not currently running, via `startForegroundService`. The loop runs
-**every 10 seconds**, beginning 30 seconds after start.
+intent for every service that matches, and `checkProcessIfAlive` starts any of them not
+currently running via `startForegroundService`. The loop runs **every ten seconds**,
+beginning thirty seconds after start.
 
-**So the resurrection is not scoped to the microphone and the GPS tracker. It is
-available to any application that declares one of those three actions in its manifest.**
-Declare `com.atoto.keepalive` on a service and a system-signed, `persistent="true"`
-process will restart it within ten seconds of it being killed, indefinitely, with no
-user-visible indication. On a platform whose signing key is published (§5.1), the set of
-applications that can do this is unbounded.
+So the resurrection is not reserved for the microphone and the location tracker.
+**Any application declaring one of those three actions on a service will be restarted
+within ten seconds of being killed, indefinitely, with no user-visible indication.** On
+a platform whose signing key is published (§5.1), the set of applications that can do
+that is unbounded.
 
-**The service itself is unprotected.** From the manifest:
+Neither the service nor the provider it ships with is protected. From the manifest:
 
 ```xml
 <service  exported="true" persistent="true" name="…KeepAliveService"/>
 <provider exported="true" authorities="com.atoto.lockprovider" name="…LockProvider"/>
 ```
 
-Both are exported. **Neither declares a permission.** Any application can start the
-service and any application can reach the provider.
+Both exported. **Neither declares a permission.** Any application on the device can
+start the service, and any application can reach the provider.
 
-**And `com.atoto.lockprovider` is not a lock in the §6 sense.** It is a mutex: a
-ContentProvider at `content://com.atoto.lockprovider` holding one boolean, exposing
-`acquire_lock` and `release_lock` through `call()`. First caller wins, everyone after
-gets `false` until it is released. Listing it in the persistence set above without that
-distinction implied a connection to Chapter 6 that does not exist, and there is none.
+`com.atoto.lockprovider` is a mutex, not a device lock and nothing to do with Chapter 6.
+It is a ContentProvider at `content://com.atoto.lockprovider` holding a single boolean,
+exposing `acquire_lock` and `release_lock` through `call()`. First caller wins; everyone
+after gets `false` until it is released. Because it is exported without a permission,
+any application can take that mutex and never release it, or release one it never held.
+**Nothing in this application ever acquires it:** the authority string appears twice in
+the entire APK, both times inside `LockProvider` itself.
 
-Because it is exported without a permission, any application on the device can acquire
-that mutex and never release it, or release one it never held. **Nothing in this
-application ever acquires it**: the authority string appears twice in the entire APK,
-both times inside `LockProvider` itself. Whatever it was built to serialize, this app
-does not use it, and it stands open to anything that does.
+Of everything on this device, the OEM built dedicated resurrection machinery, made it
+generic, and left it unauthenticated. The two named beneficiaries are the always-on
+microphone and the GPS tracker.
 
-**What survives unchanged.** The microphone listener and the GPS tracker are in the
-protected set, and the point that the OEM built dedicated resurrection machinery for
-those two stands. **What replaces the original claim** is that the machinery is generic,
-unauthenticated, and offered to any caller who knows the name.
+That reframes both of the findings it protects. A GPS uploader that stops when killed is
+a feature working badly. A GPS uploader with a system-signed companion whose job is to
+restart it is a design decision.
+
+The same intent appears in `/system/etc/permissions/platform.xml`, where
+`com.abupdate.fota_demo_iot`, the ADUPS update client, is placed on the Doze allowlist
+as `allow-in-power-save`. Android suspends background applications when the device
+idles. This one is explicitly exempted, so the silent-install channel is never paused.
 
 ---
 
@@ -333,24 +250,14 @@ The destination is the endpoint documented statically in F-001:
 in `BuildConfig.java` and the build flavour marked `track_hu_cb6Prod`.
 
 Static analysis established that the code existed. This established that it ran, on
-this device, for 5.7 days, and had 1,486 positions waiting to leave.
+this device, for 5.7 days, and had 1,486 positions waiting to leave. Every figure above
+was recomputed directly from the database and reproduces exactly.
 
-### 8.1.1 Re-verified 2026-09-01, and the endpoint count was understated
+`TrackingController.send(Position)` calls `ApiConfig.getUpdateLocation()`. The build
+flavour in the compiled metadata is `app_track_hu_cb6ProdRelease`.
 
-Unlike Chapters 6 and 7, every figure above survives re-checking. The database
-(sha256 `72199164…f906ecdd`) was re-queried directly and each number reproduces
-exactly: **1,486 rows; 2026-05-14 03:06:21 to 2026-05-19 19:16:21, 5.67 days; 599
-distinct at four decimal places; 1,484 distinct at full precision; 562 samples above
-zero speed; maximum 73.4; bounding box 35.4614787 to 35.97055234 N and -87.05767129 to
--86.77956963 W; eight decimal places of stored latitude.**
-
-`TrackingController.send(Position)` was also confirmed: it calls
-`ApiConfig.getUpdateLocation()`, which resolves to
-`BASE_URL + "/atoto-gps-core/gps/v1/uploadPosition"`. The build flavour string in the
-compiled metadata is `app_track_hu_cb6ProdRelease`.
-
-**What the paper got wrong is by omission.** `ApiConfig` does not carry one endpoint.
-It carries **seven**, all on the same base:
+**Position is not the only thing it sends.** `ApiConfig` carries seven endpoints on the
+same base:
 
 ```
 /atoto-gps-core/gps/v1/uploadPosition                  location upload
@@ -361,29 +268,25 @@ It carries **seven**, all on the same base:
 /atoto-gps-core/gps/v1/getRegisterInfo/                registration record
 ```
 
-Three of those change the character of the finding.
+Three of those matter beyond the count.
 
-**`carAction_updateSystemInfo` is a second upload path.** `TrackingController` carries
-`onSystemDataUpdate`, which posts a `SystemModel` to it. Position is not the only thing
-this application sends.
+`carAction_updateSystemInfo` is a second upload path; `TrackingController.onSystemDataUpdate`
+posts a `SystemModel` to it.
 
-**`getRegisterEmail` and `getRegisterInfo` are identity endpoints.** A GPS tracker that
-also retrieves the registered email address associated with a unit is not only
-recording where the vehicle went. It has a route to attach that record to a person.
+`getRegisterEmail` and `getRegisterInfo` are identity endpoints. A tracker that can
+retrieve the registered email address for a unit is not only recording where a vehicle
+went. It has a route to attach that record to a person.
 
-**`carAction_info` is the configuration document Chapter 9 §9.1 describes**, the one
-whose response carries `needUpdate` and `apkUrl` and drives `startUpload`. The
-location tracker and the silent-install channel are the same API family on the same
-host, reached by the same application.
+`carAction_info` is the configuration document described in §9.1, whose response carries
+`needUpdate` and `apkUrl` and drives the silent install. **The location tracker and the
+silent-install channel are the same API family, on the same host, reached by the same
+application.**
 
-**One thing this pass could not confirm.** The `BASE_URL` literal itself.
-`ApiConfig.BASE_URL` reads from `BuildConfig.BASE_URL`, and the hostname
-`gpstrack.myatoto.com` stated above comes from F-001's earlier analysis rather than
-from anything re-read here. The APK is absent from the 2026-06-04 ROM capture, whose
-`Atoto_track_hu_ahd` directory contains only a `lib` subdirectory, and the string did
-not surface in the preserved dex extract. **The path is verified; the host is carried
-forward from the earlier pass and should be re-confirmed before that hostname is
-quoted anywhere externally.**
+`ApiConfig.BASE_URL` reads from `BuildConfig.BASE_URL`. The hostname above is carried
+from the F-001 analysis: the tracker APK is absent from the 2026-06-04 ROM capture,
+whose `Atoto_track_hu_ahd` directory holds only a `lib` subdirectory, and the literal did
+not surface in the preserved dex extract. **The paths are verified from code; the host
+should be re-confirmed before it is quoted externally.**
 
 ## 8.2 A message about a child
 
@@ -406,10 +309,9 @@ told anything about.
 The permission holder is `com.atoto.speechtotext`, the same package as the wakeword
 listener, which declares `READ_SMS` alongside `RECORD_AUDIO`.
 
-**And it is silent-install channel 5.** §9.1 lists that channel under the component
-name `com.atoto.command.dispatcher.service`, which is a service inside this same
-package. The application that received this message also holds `INSTALL_PACKAGES`,
-`CAMERA`, `SYSTEM_ALERT_WINDOW` and `READ_PRIVILEGED_PHONE_STATE`. See §9.1.1.
+**It is also silent-install channel 5.** The application that received this message
+holds `INSTALL_PACKAGES`, `CAMERA`, `SYSTEM_ALERT_WINDOW` and
+`READ_PRIVILEGED_PHONE_STATE` alongside the microphone and message access. See §9.1.
 
 This is the finding that resists abstraction. A person who never bought the device,
 never consented to anything, and does not appear anywhere in the transaction had

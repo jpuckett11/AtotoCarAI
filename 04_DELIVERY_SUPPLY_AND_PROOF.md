@@ -14,7 +14,7 @@ held under embargo, malware was reported spreading through the built-in updaters
 Android automotive head unit firmware, described as the first documented infection
 chain specific to car head units. Different hardware, same door. The channels
 catalogued below should be read as a count of what is available to an attacker who is
-already known to be using this category of path. See §10.4.1.
+already known to be using this category of path. See §10.4.
 
 ## 9.1 Six channels, not one
 
@@ -27,60 +27,42 @@ audit found six.
 | 2 | `install_suding_so.sh` | shell script | Loads any `.so` dropped in `/storage/emulated/0/suding_libs/`. No network required. |
 | 3 | `com.atoto.carsysteminfo` | "car info" reader | Signature-level `INSTALL_PACKAGES`, `READ_PRIVILEGED_PHONE_STATE`, `CAMERA` |
 | 4 | `com.aidl.atoto.store` | "find apps" helper | `REQUEST_INSTALL_PACKAGES`, `REQUEST_DELETE_PACKAGES`, `QUERY_ALL_PACKAGES`, `PACKAGE_USAGE_STATS` |
-| 5 | `com.atoto.command.dispatcher.service` | "drive chat" | `INSTALL_PACKAGES`, `READ_SMS`, `RECORD_AUDIO`, `SYSTEM_ALERT_WINDOW` |
+| 5 | `com.atoto.speechtotext` | "drive chat" | `INSTALL_PACKAGES`, `READ_SMS`, `RECORD_AUDIO`, `CAMERA`, `SYSTEM_ALERT_WINDOW` |
 | 6 | `net.esimx.lpaui` | eSIM profile manager | `WRITE_SECURE_SETTINGS`, `MODIFY_PHONE_STATE`, `REQUEST_INSTALL_PACKAGES` |
 
 ![**Figure 4. Six install channels and what each already holds.** A filled square is a permission the package holds on the shipped device. The outlined squares mark the packages that hold only `REQUEST_INSTALL_PACKAGES`, which prompts the user; the filled ones in that column hold `INSTALL_PACKAGES`, which does not.](figures/fig6_channels.png)
 
 `INSTALL_PACKAGES` is not `REQUEST_INSTALL_PACKAGES`. The former installs with no user
 dialog and is signature-level, meaning it cannot be granted to a third party
-application. **Three of these hold it**, channels 1, 3 and 5. They hold it because they
-are signed with the platform key from §5.1, which is public.
+application. Three of these hold it, channels 1, 3 and 5. They hold it because they are
+signed with the platform key from §5.1, which is public. Channel 2 is a shell script and
+holds no permissions at all.
 
-Channel 5 is worth reading twice. An application called "drive chat" holds silent
-install, SMS read, microphone, and overlay. The name explains none of those.
+Every permission in that table was read from the shipped manifests. The table also
+understates them. `READ_PRIVILEGED_PHONE_STATE`, which exposes IMEI and subscriber
+identifiers, is held by four of the five applications. Channel 4 additionally holds
+`SYSTEM_ALERT_WINDOW`; channel 3 additionally holds `REQUEST_INSTALL_PACKAGES`.
 
-### 9.1.1 Verified 2026-09-01, with two corrections and one connection the paper missed
+**Channel 5 is the same application as the wakeword listener.**
+`com.atoto.command.dispatcher.service` is a component name, not a package. It lives
+inside `Atoto_DriveChat_s8`, whose package is **`com.atoto.speechtotext`** — the
+application §8.2 identifies as the always-on wakeword listener, and the one that
+received the medical message.
 
-Every permission in the table above was re-read from the shipped manifests and **every
-one is confirmed.** The table is accurate. Three things around it were not.
-
-**Correction 1, arithmetic.** The sentence above previously read "four of these hold
-it." Three do: `com.abupdate.fota_demo_iot`, `com.atoto.carsysteminfo`, and channel 5.
-Channels 4 and 6 hold `REQUEST_INSTALL_PACKAGES`, which prompts. Channel 2 is a shell
-script and holds no permissions at all. **Corrected in place above.**
-
-**Correction 2, and it matters more than it looks.** Channel 5 is listed as package
-`com.atoto.command.dispatcher.service`. That is not a package. It is a *component*
-inside `Atoto_DriveChat_s8`, whose actual package name is **`com.atoto.speechtotext`**.
-
-**Which means Chapter 8 and Chapter 9 have been describing the same application under
-two different names, and neither chapter says so.** §8.2 identifies
-`com.atoto.speechtotext` as the wakeword listener that holds `READ_SMS` alongside
-`RECORD_AUDIO`, and it is the package that ingested the medical message. §9.1 lists it
-as silent-install channel 5 without recognising it.
-
-Read as one package, its declared permission set is:
+Read as one package, what it declares is:
 
 ```
 INSTALL_PACKAGES              silent install, no dialog
-RECORD_AUDIO                  the always-on wakeword microphone
-READ_SMS                      the Bluetooth MAP ingestion in 8.2
-CAMERA                        not mentioned anywhere in this paper until now
+RECORD_AUDIO                  the always-on microphone
+READ_SMS                      the Bluetooth MAP ingestion of §8.2
+CAMERA
 SYSTEM_ALERT_WINDOW           draw over other applications
-READ_PRIVILEGED_PHONE_STATE   IMEI and subscriber identifiers
+READ_PRIVILEGED_PHONE_STATE   IMEI and subscriber identity
 ```
 
-**One application on this device holds the microphone, the camera, message access,
-overlay, privileged phone identity, and the ability to install software without asking.**
-That is not six findings distributed across two chapters. It is one package, and the
-paper had all the pieces and never put them next to each other.
-
-**Under-reported elsewhere too.** `READ_PRIVILEGED_PHONE_STATE` is held by four of the
-five packages, and is in the table for none of them. Channel 4 additionally holds
-`SYSTEM_ALERT_WINDOW`; channel 3 additionally holds `REQUEST_INSTALL_PACKAGES`. Every
-one of those is an addition to the case, not a subtraction. **In this chapter the errors
-all run in the same direction: the shipped device is worse than the paper said.**
+One application on this device holds the microphone, the camera, message access,
+overlay, privileged phone identity, and the ability to install software without asking.
+An application called "drive chat". The name explains none of it.
 
 ## 9.2 The channels are not dormant
 
@@ -547,7 +529,7 @@ documented the host-to-device protocol including the Automotive Link certificate
 without access to any device credential, and this work, which recovered the credential
 from hardware.
 
-### 10.4.1 Prior art, and what is different here
+### Prior art, and what is different here
 
 The adjacent literature is real and this paper does not stand alone. Stating it
 plainly, because a claim of novelty that ignores neighbouring work invites exactly one
