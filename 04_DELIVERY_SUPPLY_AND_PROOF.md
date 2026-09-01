@@ -565,12 +565,29 @@ arbitrary frames to the vehicle bus, and whether a given vehicle's gateway carri
 to safety-relevant ECUs.
 
 The first was answerable by dumping the reader's firmware and sniffing the BLE link.
-Neither was done before the device left the researcher's custody: the reader was
-handed to Homeland Security Investigations alongside the AI Box, in the same custody
-chain, and the pre-handoff flash dump did not happen. That work is therefore not
-available to be completed here, and the question stays open for whoever holds the
-hardware. It is recorded as a gap rather than presented as a limitation of the
-analysis, because it was a step this research intended to take and did not.
+Neither was done, for two reasons worth separating, because one of them is a fact about
+the bench and not about the attack.
+
+**The link would not stay up in the lab, and that is a lab artifact.** The subject was
+examined inside a shielded enclosure, which is the correct handling for a device
+carrying a cellular modem, a remotely reprovisionable eSIM and six silent-install
+channels. Shielding also suppresses the BLE pairing this chain runs on, so it did not
+hold inside the enclosure. Exercising the chain requires the RF environment the
+enclosure exists to remove, and both requirements cannot be met on one bench. See §3.7.
+
+**In a vehicle the same link is always up, deliberately.** §10.5.2 established that the
+pairing is held open by `com.atoto.btlock`, a persistent foreground service, kept alive
+by the same `AtotoKeepAliveService` that exists to restart the microphone and the
+location tracker. It does not depend on the user having the device's interface open,
+and on an in-dash unit rather than a dongle it is powered whenever the vehicle is. **The
+one environment where this pairing is unreliable is a shielded room.** In the deployed
+case the vendor built a watchdog specifically to guarantee it.
+
+**Then custody ended.** The reader went to Homeland Security Investigations alongside
+the AI Box, in the same chain, and the pre-handoff flash dump did not happen. That work
+is not available to be completed here and the question stays open for whoever holds the
+hardware. It is recorded as a gap rather than a limitation of the analysis, because it
+was a step this research intended to take and did not.
 
 The second varies by manufacturer and model year: flat buses on older vehicles carry
 such frames, central gateways on newer ones usually filter them, and the middle of that

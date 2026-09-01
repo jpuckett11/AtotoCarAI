@@ -198,6 +198,26 @@ modem, not from the modem image itself.
 
 **ABX parsing is incomplete** for some settings files, as noted in 3.3.
 
+**No RF-side testing of the Bluetooth chain, and the reason is a real conflict rather
+than an oversight.** A device carrying a cellular modem, an eSIM that can be
+reprovisioned remotely, and six silent-install channels is examined inside a shielded
+enclosure. That is the correct handling. It stops the subject reaching a network, being
+updated mid-analysis, or moving data out while it is open.
+
+The vehicle-side chain in §10.5 runs over Bluetooth Low Energy to the bundled OBD-II
+reader, and shielding suppresses exactly that link. The pairing did not stay up inside
+the enclosure. Exercising that chain requires the RF environment the enclosure exists
+to remove.
+
+**Both requirements cannot be satisfied on the same bench.** Doing it properly needs a
+screened environment with controlled RF pass-through, or an unshielded rig accepting
+that a modem-equipped subject is live on air throughout the test. Neither was available
+here. That is the first reason the terminal step of §10.5 was never validated. The
+second is that both devices entered HSI custody before it could be arranged.
+
+Recorded because the next person to attempt this will meet the same wall on their first
+afternoon, and because a limitation with a stated cause is worth more than a silence.
+
 ---
 
 ## Appendix A - tooling
