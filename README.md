@@ -41,7 +41,7 @@ Read the disclosure status in the front matter before quoting anything.
 
 ## Thanks
 
-**HaleHound** built the hardware that makes this kind of work possible for an
+**HaleHound™** built the hardware that makes this kind of work possible for an
 independent researcher. Purpose-built RF and wireless survey tools, priced so that
 somebody without a lab budget can actually own one, and supported by people who
 answer when you ask a question.
