@@ -111,6 +111,14 @@ switched off. This has none of that. There is nothing to detect, nothing to name
 bug report, and nothing for a vendor to disable in the next build. Asked about
 `startLockTask`, the vendor can truthfully answer that they do not use it.
 
+**[I] And there is one more thing to say about it, which §4.2 supplies.** The absence of
+an exit here is not the absence of controls on this device. §4.2 catalogues twenty-six
+factory codes that open the settings menu, the developer options, the serial console, the
+ADB bridge and the installer, instantly and without a second factor. **The switches were
+built. They answer to the manufacturer, to a technician, and to anyone who has decompiled
+a shipped APK.** What is missing in this chapter is not a control surface. It is the
+owner's name on any part of it.
+
 ### 6.5.1 What the same pass found instead
 
 `IMainSdkKeyServer` also exposes `requestMockKeyEvent(String, int, int)` over Binder,
@@ -218,7 +226,8 @@ idles. This one is explicitly exempted, so the silent-install channel is never p
 Everything to this point is capability. This chapter is record.
 
 On 2026-05-21 the device's `/data` partition was extracted live, via PC ADB mode
-entered with factory code `142618`, followed by native root shell. 871 MB, 876 files,
+entered with the documented factory code for that mode (§4.2), followed by native
+root shell. 871 MB, 876 files,
 SHA-256 manifest retained.
 
 ## 8.1 One thousand four hundred and eighty-six positions

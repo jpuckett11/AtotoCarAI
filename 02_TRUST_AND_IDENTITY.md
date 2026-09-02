@@ -25,7 +25,8 @@ Qualcomm SDM662 inside a Quectel SC200U module. It is not a Pixel and has no
 relationship to Google beyond the certificate discussed in Chapter 5.
 
 The true identity is reachable, but only after entering an OEM password on the head
-unit display. With factory code `142618` the descriptor changes to:
+unit display. With the factory code for `PASS_WORLD_SDCARPLAY_REVERSE_DISABLE` (§4.2,
+values redacted) the descriptor changes to:
 
 ```
 05c6:90db  Qualcomm BENGAL-IDP _SN:D47E5DBC
@@ -41,43 +42,108 @@ Chinese IoT module with a cellular modem.
 hardware family. The disguise is not an Atoto choice. It is a platform-level pattern
 across the Carlinkit-family OEM output.
 
-## 4.2 Eighteen hardcoded passwords open eighteen doors
+## 4.2 Twenty-six hardcoded passwords, and none of them are the owner's
 
 `FactoryConfig.apk` (`com.sd.factoryconfig`) gates the OEM factory menu behind a
-numeric keypad. Decompilation of `SplashActivity` recovered the full table. Entry is
-by physical access to the touchscreen. There is no second factor, no account, no lock.
+numeric keypad. Decompilation of `SplashActivity` recovered the full table: **nineteen
+action codes that work regardless of brand, and eight menu codes selected by the
+`ro.board.reverse.custom` brand profile, twenty-six distinct values across twenty-five
+constants.** Entry is by physical access to the touchscreen. There is no second factor,
+no account, no lock, and no log.
 
-The main menu password varies by the `ro.board.reverse.custom` brand profile. On this
-unit it is `4545`. The action passwords work regardless of variant:
+> **Redaction note.** The code values are withheld in this published version. The
+> constant names and their effects are printed in full, because the finding is that the
+> doors exist, that each is one keypad entry deep, that there is no second factor, and
+> that the whole table is recoverable by anyone who decompiles an application shipped on
+> the device. None of that depends on the reader holding the digits. The fleet is
+> deployed, unpatched and in cars, and this section would otherwise be a working key ring
+> for every unit built on the reference design. The values are held in the case material
+> routed to the federal track.
 
-| Code | Constant | Effect |
-|---|---|---|
-| `4545` | `PASS_WORLD` | Full factory settings menu |
-| **`9527`** | `PASS_WORLD_WIFI` | **Enable wireless ADB.** Sets `service.adb.tcp.port 5555`, restarts adbd |
-| **`142618`** | `PASS_WORLD_SDCARPLAY_REVERSE_DISABLE` | **Toggle PC-ADB mode**, exposes true Qualcomm identity, console debug |
-| `9999` | `PASS_WORLD_OPEN_DEVELOPER_SETTINGS` | Android developer settings |
-| `888888` | `PASS_WORLD_CHUAN_DEBUG` | Serial console debug |
-| `1111` | `PASS_WORLD_IGNORE_ENCRYPTED` | **Ignore the OTA encryption check** |
-| `123123` | `PASS_INSTALL_APP_PT` | Allow APK install |
-| `6868` | `PASS_IGONORE_QR_CODE` | Bypass activation QR |
-| **`668668`** | `PASS_WRITE_IMEI` | **Write IMEI** |
-| `1134` | `PASS_WORLD_2290_1234` | Opens `com.quectel.modemreboot`, `com.meig.logger`, `com.qlog` |
-| `4747` | `PASS_4G_CONTROL` | Toggle 4G |
-| `5212` | `PASS_WORLD_HDMI_OTA` | HDMI OTA upgrade |
-| `110144` | `CLEAN_FACTORY_CONFIG` | Clear factory config |
+| Constant | Effect |
+|---|---|
+| `PASS_WORLD` | Full factory settings menu (brand default) |
+| **`PASS_WORLD_WIFI`** | **Enable wireless ADB.** Sets `service.adb.tcp.port 5555`, restarts adbd |
+| **`PASS_WORLD_WIFI_6350`** | **The same, for a different chipset** |
+| **`PASS_WORLD_SDCARPLAY_REVERSE_DISABLE`** | **Toggle PC-ADB mode**, exposes true Qualcomm identity, root shell, console debug |
+| `PASS_WORLD_OPEN_DEVELOPER_SETTINGS` | Android developer settings |
+| `PASS_WORLD_CHUAN_DEBUG` | Serial console debug |
+| **`PASS_WORLD_IGNORE_ENCRYPTED`** | **Ignore the OTA encryption check** |
+| **`PASS_INSTALL_APP_PT`** | **Allow APK install** |
+| `PASS_IGONORE_QR_CODE` | Bypass activation QR |
+| `PASS_CACTH_LOG` | Copy system log |
+| `PASS_WORLD_FACTORY_AUDIO` | Audio burn-in test |
+| `PASS_WORLD_HDMI_OTA` | HDMI OTA upgrade |
+| `PASS_WORLD_REVERSE_ASSIST` | Reverse-assist debug |
+| `PASS_4G_CONTROL` | Toggle 4G |
+| `PASS_WORLD_SPLIT` | Split-app activity |
+| **`PASS_WRITE_IMEI`** | **Write IMEI** |
+| `PASS_WORLD_2290_1234` | Opens `com.quectel.modemreboot`, `com.meig.logger`, `com.qlog`, `com.fibo.logviewer` |
+| `CLEAN_FACTORY_CONFIG` | Clear factory config |
+| `CLEAN_REMOVE_YIKA` | Re-enable `com.ecar.assistantnew` |
 
-Three of those deserve emphasis.
+The eight menu codes are per-brand: `kaierda`, `kaierda0655`, `ronglianfa`, `dzsj-ckt`,
+`xiluo-vietmap`, `mmb`, `chelianyi_mirumo`, and the default this unit ships with. That a
+single APK carries the factory passwords for eight brands is §4.3's argument arriving
+early.
 
-`9527` enables **wireless ADB on TCP 5555**. The device auto-joins saved Wi-Fi
-networks. Anyone who has touched the screen once has a persistent remote root path
-from anywhere on that network.
+### What the table is, read against the rest of the paper
 
-`668668` **rewrites the IMEI**. That is a device-cloning and fraud primitive shipped
-in a consumer product, gated by a six-digit constant recoverable by anyone who
-decompiles the APK.
+This was first recorded as a list of debug conveniences. Against Chapters 5, 6 and 9 it
+is not that.
 
-`1111` **disables the OTA encryption check**, which matters in combination with the
-update channels in Chapter 7.
+**A code on the keypad accepts an APK.** `PASS_INSTALL_APP_PT` toggles the device into
+accepting application installs. Chapter 9 catalogues six silent-install channels, each
+of which needs either a compromised package already on the device or control of an
+update endpoint. This one needs neither. It is a number typed on a touchscreen.
+
+**The signature gate behind it is already open.** §5.1 establishes that the platform is
+signed with an AOSP key whose private half is published in the Android source tree, and
+that 276 of 354 packages carry one of those keys, `PackageInstaller`, `Settings` and
+`SystemUI` among them. An application signed with that same published key satisfies this
+device's signature check, and one declaring the system shared user identity is admitted
+at platform privilege rather than into an application sandbox. **The install gate and the
+signature gate fail together, and neither is a defect. Both are vendor configuration
+working exactly as specified.**
+
+**Nothing that lands has to survive anything.** §6.4 established `AtotoKeepAliveService`:
+a `persistent="true"` system process that restarts, on a ten-second cycle, any service
+declaring the vendor's keepalive intent. Persistence on this device is not an attacker's
+problem to solve. It is a shipped feature.
+
+**Two codes make it remote.** `PASS_WORLD_WIFI` places adbd on TCP 5555 on a device that
+auto-joins saved networks. `PASS_WORLD_WIFI_6350` does the same on a different chipset,
+which is why Chapter 10's argument shows up here in Chapter 4: the wireless-ADB door is
+not this product's decision, it is the reference design's, and it was carried across
+silicon families.
+
+**Two more make it a different device.** `PASS_WRITE_IMEI` rewrites the hardware
+identity. Channel 6 of §9.1, `net.esimx.lpaui`, holds `WRITE_SECURE_SETTINGS` and
+`MODIFY_PHONE_STATE` over an eSIM that can be reprovisioned remotely. Hardware identity
+and subscriber identity are both mutable, on a cellular endpoint that travels in a
+vehicle and logs its own position.
+
+**What it would be landing on.** The microphone with its own keepalive entry (§6.2), the
+position uploader with the same (§8.1), the Message Access Profile ingest of the paired
+phone's contacts and messages (§7.3), the continuous OBD-II read (§10.2), and the
+projection session this device sits in the middle of by construction.
+
+**[I] The conclusion, and it is the paper's.** Every element above is a documented vendor
+feature behaving as designed. Taken together they describe a supported path from brief
+physical contact with a touchscreen to a persistent, system-privileged, remotely
+reachable presence on a device holding a microphone, a location history, the user's
+messages, and a connection to the vehicle bus. **No vulnerability is required at any
+step.** This is the shortest path in this paper, and it is the one that takes no skill to
+walk.
+
+**[I] And it settles something Chapter 6 could only describe.** Chapter 6 found that the
+owner cannot switch the collection off: no consent gate, no toggle, no uninstall, nothing
+to withdraw from. §4.2 is a table of twenty-six switches. They are instant, they need no
+account and no second factor, and not one of them belongs to the owner. The device is
+fully administrable by the manufacturer, by a technician, and by anyone who has
+decompiled a free APK, and closed only to the person who paid for it. **The missing lock
+in Chapter 6 is not an omission in the design. The controls were built. They were pointed
+the other way.**
 
 ## 4.3 The brand on the box is not the manufacturer
 
@@ -220,9 +286,9 @@ That file is what the recovery updater verifies OTA packages against. It is a
 different key from §5.1, doing a different job, and it is equally public.
 
 **Anyone can sign an update package this device will install.** Combined with
-factory code `1111`, which disables the OTA encryption check outright, and with the
-six delivery channels in Chapter 7, the update path has no authenticity property at
-all.
+`PASS_WORLD_IGNORE_ENCRYPTED` (§4.2), which disables the OTA encryption check outright
+from the keypad, and with the six delivery channels in Chapter 7, the update path has no
+authenticity property at all.
 
 ## 5.3 A Google-issued production private key, in the clear
 

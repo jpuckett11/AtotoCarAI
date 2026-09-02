@@ -38,6 +38,14 @@ application. Three of these hold it, channels 1, 3 and 5. They hold it because t
 signed with the platform key from §5.1, which is public. Channel 2 is a shell script and
 holds no permissions at all.
 
+**A seventh path is counted separately, and it is the cheapest of all.** §4.2's
+`PASS_INSTALL_APP_PT` toggles APK installation on from the factory keypad. It is excluded
+from the six because those are *silent* channels, reachable over the network by a package
+already resident on the device, while this one needs a fingertip on the touchscreen. That
+is the only advantage it gives up. In exchange it requires no foothold, no compromised
+package, and no control of any endpoint, and what it admits is gated by the same published
+platform key as everything else in this chapter.
+
 Every permission in that table was read from the shipped manifests. The table also
 understates them. `READ_PRIVILEGED_PHONE_STATE`, which exposes IMEI and subscriber
 identifiers, is held by four of the five applications. Channel 4 additionally holds

@@ -48,7 +48,7 @@ device sold to make a phone talk to a car is, by construction, a machine-in-the-
 between the two, holding credentials that let each side believe it is talking to the
 other. Everything that follows is about what that position becomes when the device
 occupying it has no working trust boundary, ships with a published signing key, and
-accepts code from six channels.
+accepts code from six software channels and a seventh that opens from the keypad.
 
 The analysis found no functioning trust boundary at any layer examined.
 
